@@ -1,5 +1,6 @@
 package com.min.project.common;
 
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -25,7 +26,9 @@ public class LogAdvice {
 	public void allPointcut() {}
 	
 	@Before("allPointcut()")
-	public void pringLog() {
-		System.out.println("[공통로그] 비즈니스 로직 수행 전 동작");
+	public void pringLog(JoinPoint jp) {
+		String method = jp.getSignature().getName();
+		Object[] args = jp.getArgs();
+		System.out.println("[공통로그] 비즈니스 로직 수행 전 동작"+method+"()메소드 ARGS:" + args[0].toString());
 	}
 }

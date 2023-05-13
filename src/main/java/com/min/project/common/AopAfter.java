@@ -5,12 +5,20 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-@Aspect
+@Service
+@Aspect // Aspect = Pointcut + Advice
 public class AopAfter {
+	
+	@Pointcut("execution(* com.min.project..*Impl.*(..))")
+	public void allPointcut() {}
 
+		@AfterThrowing("allPointcut()")
 		public void returnException(JoinPoint joinPoint, Object returnVal) throws Exception{
 			String methodName = joinPoint.getSignature().getName();
 			if(methodName.indexOf("Wrt") > -1 || methodName.indexOf("Mdf") > -1 || methodName.indexOf("Del") > -1) {
@@ -19,7 +27,7 @@ public class AopAfter {
 				// DefaultVO.getResultBln()을 참고로 하여 해당 내역을 롤백한다. 
 				String getBln = (String)getFieldValueByName(returnVal,"resultBln");
 				if(null != getBln && "False".equals(getBln)){
-					TransactionAspectSupport.				currentTransactionStatus().setRollbackOnly();
+					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 					return;
 			}
 			// DeFaultVo.getResultErr()를 참고로 하여 해당 내역을 롤백해준다.
