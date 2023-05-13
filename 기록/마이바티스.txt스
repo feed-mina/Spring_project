@@ -1,0 +1,73 @@
+SQLMap 
+SQL Session 공장 > 컨테이너
+마이바티스는 메인설정파일을 SqlMapConfig.xml로 설정되어있다. 1) 데이터소스 2) SQL 맵파일 
+마이바티스도 수많은 MappedStatement 를 통해 JDBC와 연결된다.
+
+SQL파일 
+insert,update,delete 태그를 이용 >
+스프링 : 빈태그를 통해 클래스 객체를 메모리에 하나씩 하나씩 생성 ,
+빈등록한 클래스가 5개이면 5개 컨테이너를 등록한다.
+SQL이 5개면 MappedStatement가 5개 생성 
+컨테이너는 유니크한 id로 설정한다.
+
+id가 중복되면 객체가 충돌된다.
+
+select getboard로 등록한 select 객체 
+boardMapping한 객체 , getBoard를 id로 설정, 파라미터 타입
+seq값을 채워서 resultset으로 ㅇ나온 결과값을 resultType으로 설정한 "board" BoardDAO로 다시 돌아간다. 
+파라미터 타입과 result type으로 무엇을 결정할지 
+VO (JavaBean), Map, Primitive type , xml 파일이 있다. 
+
+DAO입장에서는 마이바티스 컨테이너만 알면 된다. 
+
+ex)
+마이바티스 컨테이너가 가지고 있는 객체들 중에 id가 getBoard인 MappedStatement를 찾아서 여기에 등록된 select를 실행하면 돼. 이때 실행할때 파라미터 값으로 seq를 채우고 이 select를 JDBC를 통해 h2를 전송하면 resultset 반환될텐데 검색이 되면 이 resultset값을 boardDAO 객체으로 지정한 result type에 맵핑해서 반환하라.
+
+Mapper.xml : 네임스페이스와 id를 연결해서 사용을 해야 유니크한 id를 조금 더 쉽게 포장해서 나온다.
+파라미터 타입 속성은 생략이 가능하다. resultType은 절대로 생략할 수 없다. 
+
+디렉토리/패키지가 다르면 동일한 이름의 클래스를 여러군데 작성할수 있듯이 다른 파일에 선언된 아이디는 네임스페이스가 다르므로 다른 아이디로 처리될 수 있다. 
+
+파라미터 타입과 result 타입을 이용할때 Alias를 이용 할 수 있다. 
+resultMap 속성은 result type과 비슷한 기능을 가지고 있다. resultMap을 설정하고 나면 id를 resultMap 속성값으로 등록하면 마이바티스가 select 해고 select를 통해 resultMap을 통해 맵핑한다. resultMap 의 type을 통해 어떤 변수에 어떤 컬럼값을 지정할지 결정할 수 있따.
+
+<resultMap id="boardResult" type="board">
+<id property="seq" column="SEQ" />
+<result property="title" column="TITLE"/>
+<result property="writer" column="WRITER"/>
+<result property="content" column="CONTENT"/>
+<result property="regDate" column="REGDATE"/>
+<result property="cnt" column="CNT"/>
+</resultMap>
+
+
+resultMap을 사용하는 경우는 SQL의 컬럼값과 컨테이너의 변수 값이 다를때 주로 사용한다. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

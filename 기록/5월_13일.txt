@@ -1,0 +1,362 @@
+
+09:07:37.450 [main] ERROR o.s.web.servlet.DispatcherServlet - Context initialization failed
+
+
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'boardSercie': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private com.min.project.board.impl.BoardDAO
+
+com.min.project.board.impl.BoardServiceImpl.boardDAO; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No matching bean of type [com.min.project.board.impl.BoardDAO] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+	5월 11, 2023 9:07:37 오전 org.apache.catalina.core.ApplicationContext log
+심각: 서블릿 [appServlet]을(를) 위한 Servlet.init() 호출이 예외를 발생시켰습니다.
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'boardSercie': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private com.min.project.board.impl.BoardDAO com.min.project.board.impl.BoardServiceImpl.boardDAO; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No matching bean of type [com.min.project.board.impl.BoardDAO] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+
+Caused by: org.springframework.beans.factory.BeanCreationException: Could not autowire field: private com.min.project.board.impl.BoardDAO com.min.project.board.impl.BoardServiceImpl.boardDAO; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No matching bean of type [com.min.project.board.impl.BoardDAO] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+
+
+5월 11, 2023 9:07:37 오전 org.apache.catalina.core.StandardContext loadOnStartup
+심각: 웹 애플리케이션 [/project] 내의 서블릿 [appServlet]이(가) load() 예외를 발생시켰습니다.
+org.springframework.beans.factory.NoSuchBeanDefinitionException: No matching bean of type [com.min.project.board.impl.BoardDAO] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+
+
+Caused by: org.springframework.beans.factory.BeanCreationException: Could not autowire field: private com.min.project.board.impl.BoardDAO com.min.project.board.impl.BoardServiceImpl.boardDAO; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No matching bean of type [com.min.project.board.impl.BoardDAO] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+
+
+====================================================================================================================================
+====================================================================================================================================
+====================================================================================================================================
+
+5월 11, 2023 9:47:12 오전 org.apache.catalina.core.ApplicationContext log
+심각: 서블릿 [appServlet]을(를) 위한 Servlet.init() 호출이 예외를 발생시켰습니다.
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'boardSercie': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private com.min.project.board.impl.BoardDAO com.min.project.board.impl.BoardServiceImpl.boardDAO; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No matching bean of type [com.min.project.board.impl.BoardDAO] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+
+
+심각: 웹 애플리케이션 [/project] 내의 서블릿 [appServlet]이(가) load() 예외를 발생시켰습니다.
+org.springframework.beans.factory.NoSuchBeanDefinitionException: No matching bean of type [com.min.project.board.impl.BoardDAO] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+
+
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'boardSercie': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private com.min.project.board.impl.BoardDAO com.min.project.board.impl.BoardServiceImpl.boardDAO; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No matching bean of type [com.min.project.board.impl.BoardDAO] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:287) ~[spring-beans-3.1.1.RELEASE.jar:3.1.1.RELEASE]
+
+
+
+
+해당 로그는 Spring 프레임워크에서 빈을 생성하거나 주입할 때, 의존성 주입(Dependency Injection)이 실패한 경우에 발생합니다.
+
+해당 로그에서는 BoardServiceImpl 클래스에서 BoardDAO 클래스를 찾을 수 없다는 에러가 발생하고 있습니다. 이를 해결하기 위해서는 다음과 같은 방법을 시도해 볼 수 있습니다.
+
+BoardDAO 클래스가 스프링 빈으로 등록되어 있는지 확인해보세요.
+
+스프링 빈으로 등록되어 있지 않다면, BoardDAO 클래스에 @Repository 어노테이션을 추가하여 스프링이 빈으로 등록할 수 있도록 해보세요.
+스프링 설정 파일에서 BoardDAO 클래스를 스캔하도록 설정해보세요.
+
+스프링 설정 파일에 다음과 같은 코드를 추가하여 BoardDAO 클래스를 스캔하도록 설정할 수 있습니다.
+csharp
+Copy code
+<context:component-scan base-package="com.min.project.board.impl" />
+위 코드에서 "com.min.project.board.impl"는 BoardDAO 클래스가 위치한 패키지 경로를 의미합니다.
+BoardDAO 클래스를 직접 빈으로 등록해보세요.
+
+스프링 설정 파일에 다음과 같은 코드를 추가하여 BoardDAO 클래스를 빈으로 등록할 수 있습니다.
+python
+Copy code
+<bean id="boardDAO" class="com.min.project.board.impl.BoardDAO" />
+위 코드에서 "boardDAO"는 빈의 이름을 의미하며, "com.min.project.board.impl.BoardDAO"는 BoardDAO 클래스의 경로를 의미합니다.
+위 방법 중 하나를 시도하여 문제를 해결해보세요.
+
+==========================================================================================
+2023-05-12 13:00
+
+
+5월 12, 2023 12:59:46 오후 org.apache.catalina.core.StandardContext loadOnStartup
+심각: 웹 애플리케이션 [/project] 내의 서블릿 [appServlet]이(가) load() 예외를 발생시켰습니다.
+org.springframework.beans.factory.NoSuchBeanDefinitionException: No matching bean of type [com.min.project.board.impl.BoardDAO] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+
+BoardDAO 클래스에 @Repository 어노테이션을 추가하여 해당 클래스가 빈으로 등록되도록 합니다.
+
+BoardServiceImpl 클래스에 @Service 어노테이션을 추가하여 해당 클래스가 빈으로 등록되도록 합니다.
+
+스프링 설정 파일에서 BoardDAO 클래스를 빈으로 등록해 줍니다.
+
+스프링 설정 파일에서 BoardServiceImpl 클래스를 빈으로 등록해 줍니다.
+
+스프링 설정 파일에서 component-scan을 사용하여 패키지를 스캔하여 빈을 등록합니다.
+
+위와 같은 방법으로 오류를 해결할 수 있습니다. 추가적으로, 해당 오류 메시지를 보면 "Injection of autowired dependencies failed"와 "No matching bean of type [com.min.project.board.impl.BoardDAO] found for dependency"가 포함되어 있습니다. 이를 보면 자동 주입이 실패했고, BoardDAO 클래스와 관련된 빈을 찾을 수 없다는 것을 알 수 있습니다. 이러한 정보를 참고하여 오류를 해결하는 것이 도움이 될 것입니다.
+
+
+==========================================================================================
+2023-05-12
+
+
+
+5월 12, 2023 10:50:50 오후 org.apache.catalina.core.StandardContext loadOnStartup
+심각: 웹 애플리케이션 [/project] 내의 서블릿 [appServlet]이(가) load() 예외를 발생시켰습니다.
+java.io.FileNotFoundException: class path resource [org/springframework/orm/ibatis/support/SqlMapClientDaoSupport.class] cannot be opened because it does not exist
+	at org.springframework.core.io.ClassPathResource.getInputStream(ClassPathResource.java:158)
+
+5월 12, 2023 11:21:39 오후 org.apache.catalina.core.ApplicationContext log
+심각: 서블릿 [appServlet]을(를) 위한 Servlet.init() 호출이 예외를 발생시켰습니다.
+org.springframework.beans.factory.BeanDefinitionStoreException: Failed to load bean class: com.min.project.device.impl.DeviceDAO; nested exception is java.io.FileNotFoundException: class path resource [org/springframework/orm/ibatis/support/SqlMapClientDaoSupport.class] cannot be opened because it does not exist
+Caused by: java.io.FileNotFoundException: class path resource [org/springframework/orm/ibatis/support/SqlMapClientDaoSupport.class] cannot be opened because it does not exist
+	at org.springframework.core.io.ClassPathResource.getInputStream(ClassPathResource.java:158) ~[spring-core-3.1.1.RELEASE.jar:3.1.1.RELEASE]
+
+
+
+23:21:39.676 [main] ERROR o.s.web.servlet.DispatcherServlet - Context initialization failed
+org.springframework.beans.factory.BeanDefinitionStoreException: Failed to load bean class: com.min.project.device.impl.DeviceDAO; nested exception is java.io.FileNotFoundException: class path resource [org/springframework/orm/ibatis/support/SqlMapClientDaoSupport.class] cannot be opened because it does not exist
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.processConfigBeanDefinitions(ConfigurationClassPostProcessor.java:267) ~[spring-context-3.1.1.RELEASE.jar:3.1.1.RELEASE]
+	at
+
+Caused by: java.lang.ClassNotFoundException: org.springframework.orm.ibatis.support.SqlMapClientDaoSupport
+
+Caused by: java.lang.NoClassDefFoundError: org/springframework/orm/ibatis/support/SqlMapClientDaoSupport
+
+23:21:39.346 [main] DEBUG o.s.b.f.s.DefaultListableBeanFactory - Ignoring bean class loading failure for bean 'saleDAO'
+org.springframework.beans.factory.CannotLoadBeanClassException: Error loading class [com.min.project.sale.impl.SaleDAO] for bean with name 'saleDAO' defined in file [C:\DEV\eclipse-workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\springproject_alpha_pre\WEB-INF\classes\com\min\project\sale\impl\SaleDAO.class]: problem with class file or dependent class; nested exception is java.lang.NoClassDefFoundError: org/springframework/orm/ibatis/support/SqlMapClientDaoSupport
+
+Caused by: java.lang.ClassNotFoundException: org.springframework.orm.ibatis.support.SqlMapClientDaoSupport
+
+Caused by: java.lang.NoClassDefFoundError: org/springframework/orm/ibatis/support/SqlMapClientDaoSupport
+
+23:21:39.313 [main] DEBUG o.s.b.f.s.DefaultListableBeanFactory - Ignoring bean class loading failure for bean 'deviceDAO'
+org.springframework.beans.factory.CannotLoadBeanClassException: Error loading class [com.min.project.device.impl.DeviceDAO] for bean with name 'deviceDAO' defined in file
+
+
+
+해당 애플리케이션에서 "appServlet" 서블릿을 초기화할 때 오류가 발생했습니다. 오류 내용은 "java.io.FileNotFoundException: class path resource [org/springframework/orm/ibatis/support/SqlMapClientDaoSupport.class] cannot be opened because it does not exist"입니다. 이는 해당 클래스를 찾을 수 없다는 뜻으로, 클래스패스에 해당 클래스가 없거나 경로가 잘못되어 발생한 오류입니다.
+
+또한 "com.min.project.device.impl.DeviceDAO"와 "com.min.project.sale.impl.SaleDAO" 클래스를 불러올 때도 동일한 오류가 발생했습니다. 이러한 오류는 "org.springframework.orm.ibatis.support.SqlMapClientDaoSupport" 클래스를 찾을 수 없기 때문에 발생한 것입니다.
+
+따라서 해당 클래스를 프로젝트의 클래스패스에 추가하거나 경로를 수정하여 문제를 해결해야 합니다. 또는 프로젝트에서 해당 클래스를 사용하지 않도록 코드를 수정하는 방법도 있습니다.
+
+
+만약 클래스 패스(resource)상에 해당 클래스가 존재하지 않는 경우, 다음 해결 방법을 시도할 수 있습니다.
+
+프로젝트의 라이브러리 의존성 확인: 해당 클래스를 사용하는 라이브러리가 프로젝트의 의존성으로 추가되어 있는지 확인합니다. 만약 의존성이 누락되었다면, 의존성을 추가하고 다시 빌드해보세요.
+
+클래스 패스 설정 확인: 클래스 패스가 올바르게 설정되어 있는지 확인합니다. 클래스 패스에는 해당 클래스가 위치한 경로가 포함되어야 합니다. 이를 확인하기 위해 클래스 패스를 출력하거나 디버그 모드로 애플리케이션을 실행해봅니다.
+
+라이브러리 충돌 확인: 다른 버전의 라이브러리가 프로젝트의 클래스 패스에 있어 충돌이 발생할 수 있습니다. 따라서 해당 라이브러리를 제거하거나 버전을 일치시켜야 합니다.
+
+IDE 재시작: IDE를 종료하고 재시작한 후, 프로젝트를 다시 빌드해보세요.
+
+Maven 또는 Gradle 캐시 제거: Maven이나 Gradle과 같은 빌드 도구의 캐시를 제거해보세요. 종종 이 캐시가 업데이트되지 않아 문제가 발생할 수 있습니다.
+
+프로젝트 리소스 재배포: 프로젝트 리소스를 다시 배포해보세요. 종종 파일이 누락되어 문제가 발생할 수 있습니다.
+
+
+<bean id="sqlMapClientDaoSupport" class="org.springframework.orm.ibatis.support.SqlMapClientDaoSupport">
+    <property name="sqlMapClient" ref="sqlMapClient"/>
+</bean>
+
+
+
+
+==========================================================================================
+2023-05-12
+
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/C:/Users/MSH/.m2/repository/org/slf4j/slf4j-log4j12/1.6.6/slf4j-log4j12-1.6.6.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/C:/Users/MSH/.m2/repository/ch/qos/logback/logback-classic/1.0.13/logback-classic-1.0.13.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+
+org.apache.ibatis.exceptions.PersistenceException:
+### Error building SqlSession.
+### The error may exist in SQL Mapper Configuration
+### Cause: org.apache.ibatis.builder.BuilderException: Error parsing SQL Mapper Configuration. Cause: org.apache.ibatis.builder.BuilderException: The setting LogImpl is not known.  Make sure you spelled it correctly (case sensitive).
+
+Caused by: org.apache.ibatis.builder.BuilderException: Error parsing SQL Mapper Configuration. Cause: org.apache.ibatis.builder.BuilderException: The setting LogImpl is not known.  Make sure you spelled it correctly (case sensitive).
+Caused by: org.apache.ibatis.builder.BuilderException: The setting LogImpl is not known.  Make sure you spelled it correctly (case sensitive).
+
+
+Exception in thread "main" java.lang.NullPointerException
+
+
+이 오류는 SLF4J 로깅 라이브러리에서 발생하는 것으로 보입니다. 여러 가지 SLF4J 바인딩이 클래스 패스에 있어서, SLF4J는 어떤 바인딩을 사용해야 할지 결정하는 데 문제가 발생합니다. 이 오류는 여러 바인딩이 존재하기 때문에 발생하는 것이며, 실제로는 Log4j 바인딩을 사용하고 있습니다.
+
+그러나 더욱 중요한 것은 이 오류가 MyBatis SQL Mapper Configuration의 구문 분석 오류를 발생시켰다는 것입니다. MyBatis의 설정 파일에서 LogImpl이라는 설정이 알려지지 않아서 발생한 문제입니다. 이 설정은 로깅 구현체를 선택하는 데 사용됩니다.
+
+이 문제를 해결하려면 다음과 같은 단계를 수행해야 합니다.
+
+SLF4J 바인딩을 수정하여 하나의 바인딩만 클래스 패스에 유지하십시오. 이를 위해 pom.xml 파일을 열어 두 바인딩 중 하나를 선택하고 다른 하나를 주석 처리하십시오. 예를 들어, 다음과 같이 로그백(Logback) 바인딩을 선택하고 SLF4J-log4j12 바인딩을 주석 처리할 수 있습니다.
+
+
+<!--
+<dependency>
+  <groupId>org.slf4j</groupId>
+  <artifactId>slf4j-log4j12</artifactId>
+  <version>1.6.6</version>
+</dependency>
+-->
+<dependency>
+  <groupId>ch.qos.logback</groupId>
+  <artifactId>logback-classic</artifactId>
+  <version>1.0.13</version>
+</dependency>
+
+
+이 오류는 SLF4J 로깅 라이브러리에서 발생하는 것으로 보입니다. 여러 가지 SLF4J 바인딩이 클래스 패스에 있어서, SLF4J는 어떤 바인딩을 사용해야 할지 결정하는 데 문제가 발생합니다. 이 오류는 여러 바인딩이 존재하기 때문에 발생하는 것이며, 실제로는 Log4j 바인딩을 사용하고 있습니다.
+
+그러나 더욱 중요한 것은 이 오류가 MyBatis SQL Mapper Configuration의 구문 분석 오류를 발생시켰다는 것입니다. MyBatis의 설정 파일에서 LogImpl이라는 설정이 알려지지 않아서 발생한 문제입니다. 이 설정은 로깅 구현체를 선택하는 데 사용됩니다.
+
+이 문제를 해결하려면 다음과 같은 단계를 수행해야 합니다.
+
+SLF4J 바인딩을 수정하여 하나의 바인딩만 클래스 패스에 유지하십시오. 이를 위해 pom.xml 파일을 열어 두 바인딩 중 하나를 선택하고 다른 하나를 주석 처리하십시오. 예를 들어, 다음과 같이 로그백(Logback) 바인딩을 선택하고 SLF4J-log4j12 바인딩을 주석 처리할 수 있습니다.
+
+php
+Copy code
+<!--
+<dependency>
+  <groupId>org.slf4j</groupId>
+  <artifactId>slf4j-log4j12</artifactId>
+  <version>1.6.6</version>
+</dependency>
+-->
+<dependency>
+  <groupId>ch.qos.logback</groupId>
+  <artifactId>logback-classic</artifactId>
+  <version>1.0.13</version>
+</dependency>
+MyBatis 설정 파일에서 LogImpl 설정을 수정합니다. 로그백(Logback)을 사용하도록 설정하려면 다음과 같이 설정합니다.
+
+<settings>
+  <setting name="logImpl" value="LOG4J"/>
+</settings>
+
+만약 이 설정을 삭제하고 기본 로거를 사용하도록 하려면 다음과 같이 설정합니다.
+
+<settings>
+  <setting name="logImpl" value="STDOUT_LOGGING"/>
+</settings>
+
+이러한 단계를 거치면 MyBatis SQL Mapper Configuration 구문 분석 오류가 해결됩니다.
+
+
+
+
+
+
+
+
+
+==========================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+==========================================================================================
+
+
+
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by org.apache.ibatis.reflection.Reflector (file:/C:/Users/MSH/.m2/repository/org/mybatis/mybatis/3.4.6/mybatis-3.4.6.jar) to method java.lang.Class.checkPackageAccess(java.lang.SecurityManager,java.lang.ClassLoader,boolean)
+WARNING: Please consider reporting this to the maintainers of org.apache.ibatis.reflection.Reflector
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+PooledDataSource forcefully closed/removed all connections.
+Opening JDBC Connection
+Exception in thread "main" org.apache.ibatis.exceptions.PersistenceException:
+### Error updating database.  Cause: java.sql.SQLException: Error setting driver on UnpooledDataSource. Cause: java.lang.ClassNotFoundException: Cannot find class: ${driver}
+### Cause: java.sql.SQLException: Error setting driver on UnpooledDataSource. Cause: java.lang.ClassNotFoundException: Cannot find class: ${driver}
+	at org.apache.ibatis.exceptions.ExceptionFactory.wrapException(ExceptionFactory.java:30)
+
+Caused by: java.sql.SQLException: Error setting driver on UnpooledDataSource. Cause: java.lang.ClassNotFoundException: Cannot find class: ${driver}
+	at org.apache.ibatis.datasource.unpooled.UnpooledDataSource.initializeDriver(UnpooledDataSource.java:221)
+
+
+
+
+
+
+
+
+==========================================================================================
+2023년 05월 13일
+
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by org.apache.ibatis.reflection.Reflector (file:/C:/Users/MSH/.m2/repository/org/mybatis/mybatis/3.4.6/mybatis-3.4.6.jar) to method java.lang.Class.checkPackageAccess(java.lang.SecurityManager,java.lang.ClassLoader,boolean)
+WARNING: Please consider reporting this to the maintainers of org.apache.ibatis.reflection.Reflector
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+
+
+Exception in thread "main" org.apache.ibatis.exceptions.PersistenceException:
+### Error updating database.  Cause: java.sql.SQLException: Error setting driver on UnpooledDataSource. Cause: java.lang.ClassNotFoundException: Cannot find class: ${driver}
+### Cause: java.sql.SQLException: Error setting driver on UnpooledDataSource. Cause: java.lang.ClassNotFoundException: Cannot find class: ${driver}
+	at org.apache.ibatis.exceptions.ExceptionFactory.wrapException(ExceptionFactory.java:30)
+
+Caused by: java.sql.SQLException: Error setting driver on UnpooledDataSource. Cause: java.lang.ClassNotFoundException: Cannot find class: ${driver}
+	at org.apache.ibatis.datasource.unpooled.UnpooledDataSource.initializeDriver(UnpooledDataSource.java:221)
+
+	이 에러 메시지는 Java 프로그램에서 발생한 예외 상황입니다.
+
+먼저, "WARNING: An illegal reflective access operation has occurred"와 같은 경고 메시지는 자바 버전 간의 호환성 문제가 발생했을 때 나타납니다. 이 경우에는 "org.apache.ibatis.reflection.Reflector"라는 클래스에서 "java.lang.Class.checkPackageAccess" 메서드에 접근할 때 일어나는 것으로 추정됩니다. 이는 Java 9에서 새로운 모듈 시스템이 도입되면서 발생하는 문제로, 모듈 경로 및 클래스패스 등이 제대로 구성되지 않은 경우 발생할 수 있습니다.
+
+다음으로, "java.sql.SQLException: Error setting driver on UnpooledDataSource. Cause: java.lang.ClassNotFoundException: Cannot find class: ${driver}"와 같은 예외 메시지는 데이터베이스 연결 설정과 관련된 문제로 추정됩니다. 이 에러는 "UnpooledDataSource" 클래스에서 드라이버 설정을 실패하면 발생합니다. 이 클래스는 MyBatis라는 자바 ORM 프레임워크에서 사용되며, 데이터베이스 연결을 설정할 때 사용됩니다. 이 경우, 드라이버 클래스를 찾을 수 없다는 에러가 발생하는데, "${driver}"라는 이름의 변수가 정의되지 않았기 때문입니다.
+
+따라서, 이 문제를 해결하려면 다음과 같은 절차를 따르면 됩니다.
+
+"${driver}" 변수를 정의합니다. 이 변수는 데이터베이스 연결 설정 파일에서 사용되며, 데이터베이스 드라이버 클래스의 이름을 가리킵니다. 이 변수가 정의되어 있지 않다면, MyBatis에서 이를 찾을 수 없으므로 ClassNotFoundException이 발생합니다.
+
+데이터베이스 연결 설정 파일에서 드라이버 클래스 이름을 확인합니다. 이 클래스가 올바르게 지정되어 있는지 확인하고, 클래스패스에 존재하는지 확인합니다. 클래스가 없거나 클래스패스에 존재하지 않으면 ClassNotFoundException이 발생합니다.
+
+자바 버전 간의 호환성 문제가 발생하지 않도록, 자바 버전을 최신 버전으로 업그레이드하거나, --illegal-access=warn 옵션을 사용하여 경고 메시지를 출력하도록 설정할 수 있습니다.
+
+위의 절차를 따르면 이 문제를 해결할 수 있습니다.
+
+
+
+
+
+
+
+
+==========================================================================================
+
+
+2023년 05월 13일
+
+Exception in thread "main" org.apache.ibatis.exceptions.PersistenceException:
+### Error updating database.  Cause: java.sql.SQLException: Error setting driver on UnpooledDataSource. Cause: java.lang.ClassNotFoundException: Cannot find class: org.h2.Driver
+### Cause: java.sql.SQLException: Error setting driver on UnpooledDataSource. Cause: java.lang.ClassNotFoundException: Cannot find class: org.h2.Driver
+	at org.apache.ibatis.exceptions.ExceptionFactory.wrapException(ExceptionFactory.java:30)
+
+
+해결방법 : 프로젝트 우클릭 > properties > JAVA BUILD PATH > dependency > add external jars > h2 설치폴더에 있는 bin 폴더에 h2.jar 를 추가 
+
+
+
+
+
+
+
+==========================================================================================
+
+
+2023년 05월 13일
+
+Opening JDBC Connection
+Created connection 120360571.
+Setting autocommit to false on JDBC Connection [conn0: url=jdbc:h2:tcp://localhost/~/test user=SA]
+==>  Preparing: insert board(seq, title, writer, content) values ((select nvl(max(seq), 0)+1 from board), ?, ?, ?) 
+Exception in thread "main" org.apache.ibatis.exceptions.PersistenceException: 
+### Error updating database.  Cause: org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "insert [*]board(seq, title, writer, content)\000a\0009\0009values\000a\0009\0009((select\000a\0009\0009nvl(max(seq), 0)+1 from board), ?, ?, ?)"; expected "INTO"; SQL statement:
+insert board(seq, title, writer, content)
+		values
+		((select
+		nvl(max(seq), 0)+1 from board), ?, ?, ?) [42001-214]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:502)
+
+이 오류는 SQL 구문 오류입니다. 즉, 쿼리가 잘못되었거나 구문이 틀린 경우에 발생할 수 있습니다. 에러 메시지에서는 "expected 'INTO'"라는 구문이 필요하다고 나와있으므로, "insert into"으로 구문을 변경해주어야 합니다.
+
+==========================================================================================
+
+
