@@ -15,7 +15,7 @@ public class BoardServiceImpl implements BoardService {
 
 	// Type 인젝션(Autowired) > Autowired 아래의 변수에 해당하는 컨테이너를 찾아서 boardDAO 컨테이너를 등록한다.
 	@Autowired
-	private BoardDAO2 boardDAO;
+	private BoardDAOMyBatis boardDAO;
 	 
 	
 	@Override

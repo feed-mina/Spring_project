@@ -7,7 +7,7 @@ import com.min.project.board.BoardVO;
 public class BoardDAOClient {
 
 	public static void main(String[] args) {
-		BoardDAO boardDAO = new BoardDAO();
+		BoardDAOMyBatis boardDAO = new BoardDAOMyBatis();
 		
 		BoardVO vo = new BoardVO();
 		vo.setTitle("Mybatis 제목");

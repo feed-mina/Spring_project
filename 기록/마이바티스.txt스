@@ -44,6 +44,10 @@ resultMap 속성은 result type과 비슷한 기능을 가지고 있다. resultM
 resultMap을 사용하는 경우는 SQL의 컬럼값과 컨테이너의 변수 값이 다를때 주로 사용한다. 
 
 
+xml에서 네임스페이스 설정이 안보일때 :
+xml을 누르고 start with 탭에 others 를 누른다음 spring config 설정 클릭
+
+
 
 
 

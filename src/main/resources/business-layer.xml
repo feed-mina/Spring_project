@@ -2,26 +2,57 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
+<!-- 
+	<bean id="boardDAO" class="com.min.project.board.impl.BoardDAO"></bean>
+	<bean id="boardService"
+		class="com.min.project.board.impl.BoardServiceImpl"></bean> -->
 
-<bean id="boardDAO" class="com.min.project.board.impl.BoardDAO2"></bean>
- <bean id="boardService" class="com.min.project.board.impl.BoardServiceImpl"></bean>
+	<!-- 생성자 아규먼트로 id가 boardDAO인 객체를 넘겨라 -->
+	<!-- <bean id="boardService" class="com.min.project.board.impl.BoardServiceImpl"> 
+		<constructor-arg ref="boardDAO"/> </bean> -->
+	<!-- setter 인젝션 <bean id="boardService" class="com.min.project.board.impl.BoardServiceImpl"> 
+		<property name="boardDAO" ref="boardDAO"/> </bean> -->
+
+	<!-- Annotation 기반의 IOC 설정 베이스 패키지를 기분으로 해서 베이스패키지 밑의 모든 클래스를 모두 등록한다 -->
+
+	<context:component-scan
+		base-package="com.min.project" />
+
+ <context:property-placeholder location="classpath:datasource.properties"/>
  
- <!--  생성자 아규먼트로 id가 boardDAO인 객체를 넘겨라-->
- <!-- 
- <bean id="boardService" class="com.min.project.board.impl.BoardServiceImpl">
- 	<constructor-arg ref="boardDAO"/>
- </bean>
-  -->
- <!-- 
- setter 인젝션
- <bean id="boardService" class="com.min.project.board.impl.BoardServiceImpl">
- 	<property name="boardDAO" ref="boardDAO"/>
- </bean>
-  -->
-  
-  <!--  Annotation 기반의 IOC 설정
-  베이스 패키지를 기분으로 해서 베이스패키지 밑의 모든 클래스를 모두 등록한다 -->
-  <context:component-scan base-package="com.min.project"/>
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName"
+			value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+	
+	<!-- Spring과 MyBatis연동 설정 -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation" value="claspath:sql-map-config.xml"/>
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	<bean class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSession"/> 
+	</bean>
+	
+	<!-- JDBCTemplate등록 -->
+	<bean class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+
+	<!-- Transcaction 설정 -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+
 </beans>

@@ -359,4 +359,94 @@ insert board(seq, title, writer, content)
 
 ==========================================================================================
 
+14:46:27.910 [main] DEBUG org.apache.ibatis.logging.LogFactory - Logging initialized using 'class org.apache.ibatis.logging.slf4j.Slf4jImpl' adapter.
+Exception in thread "main" org.apache.ibatis.exceptions.PersistenceException: 
+### Error opening session.  Cause: java.lang.NullPointerException
+### Cause: java.lang.NullPointerException
+	at org.apache.ibatis.exceptions.ExceptionFactory.wrapException(ExceptionFactory.java:30)
+	at org.apache.ibatis.session.defaults.DefaultSqlSessionFactory.openSessionFromDataSource(DefaultSqlSessionFactory.java:100)
+	 
+Exception in thread "main" org.apache.ibatis.exceptions.PersistenceException: 
+### Error opening session.  Cause: java.lang.NullPointerException
+### Cause: java.lang.NullPointerException
+	at org.apache.ibatis.exceptions.ExceptionFactory.wrapException(ExceptionFactory.java:30)
+	at org.apache.ibatis.session.defaults.DefaultSqlSessionFactory.openSessionFromDataSource(DefaultSqlSessionFactory.java:100)	 
+	 
 
+5월 13, 2023 3:02:29 오후 org.apache.catalina.core.StandardContext loadOnStartup
+심각: 웹 애플리케이션 [/project] 내의 서블릿 [appServlet]이(가) load() 예외를 발생시켰습니다.
+org.springframework.beans.factory.NoSuchBeanDefinitionException: No matching bean of type [org.mybatis.spring.SqlSessionTemplate] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.raiseNoSuchBeanDefinitionException(DefaultListableBeanFactory.java:924)	 
+
+Caused by: org.springframework.beans.factory.BeanCreationException: Could not autowire field: private org.mybatis.spring.SqlSessionTemplate com.min.project.board.impl.BoardDAOMyBatis.mybatis; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No matching bean of type [org.mybatis.spring.SqlSessionTemplate] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:506)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:87)	 
+	
+5월 13, 2023 3:02:29 오후 org.apache.catalina.core.ApplicationContext log
+심각: 서블릿 [appServlet]을(를) 위한 Servlet.init() 호출이 예외를 발생시켰습니다.
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'boardDAOMyBatis': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private org.mybatis.spring.SqlSessionTemplate com.min.project.board.impl.BoardDAOMyBatis.mybatis; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No matching bean of type [org.mybatis.spring.SqlSessionTemplate] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:287) 
+	 
+	 
+	 
+	 
+	
+5월 13, 2023 3:08:32 오후 org.apache.catalina.core.StandardContext loadOnStartup
+심각: 웹 애플리케이션 [/project] 내의 서블릿 [appServlet]이(가) load() 예외를 발생시켰습니다.
+org.springframework.beans.factory.NoSuchBeanDefinitionException: No matching bean of type [org.mybatis.spring.SqlSessionTemplate] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.raiseNoSuchBeanDefinitionException(DefaultListableBeanFactory.java:924) Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No matching bean of type [org.mybatis.spring.SqlSessionTemplate] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.raiseNoSuchBeanDefinitionException(DefaultListableBeanFactory.java:924) 
+Caused by: org.springframework.beans.factory.BeanCreationException: Could not autowire field: private org.mybatis.spring.SqlSessionTemplate com.min.project.board.impl.BoardDAOMyBatis.mybatis; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No matching bean of type [org.mybatis.spring.SqlSessionTemplate] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)} 
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'boardDAOMyBatis': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private org.mybatis.spring.SqlSessionTemplate com.min.project.board.impl.BoardDAOMyBatis.mybatis; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No matching bean of type [org.mybatis.spring.SqlSessionTemplate] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:287) 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 

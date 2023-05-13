@@ -5,16 +5,15 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 
 import com.min.project.board.BoardVO;
-import com.min.project.common.SqlSessionFactoryBean;
 
 public class BoardDAO {
 
 	// SqlSession이 바로 MyBatis 컨테이너이다.
 	private SqlSession mybatis;
 	
-	public BoardDAO() {
-		mybatis = SqlSessionFactoryBean.getSqlSessionInstance();
-	}
+	// 	public BoardDAO() {
+	// 	mybatis = SqlSessionFactoryBean.getSqlSessionInstance();
+	// }
 	
 	public void insertBoard(BoardVO vo) {
 		mybatis.insert("BoardDAO.insertBoard" , vo);
