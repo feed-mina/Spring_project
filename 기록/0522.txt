@@ -1,0 +1,187 @@
+======================================================
+5월 21일
+ObjectStreamClass$Caches로부터 soft references를 폐기하지 못했습니다
+java.io.ObjectStreamClass$Caches$1 and java.util.Map are in module java.base of loader 'bootstrap'
+
+java.util.Map are in module java.base of loader 'bootstrap'
+java.util.Map은 로더 'bootstrap'의 모듈 java.base에 있습니다.
+
+
+------------>>
+ mapper.xml의 resultType을 잘못설정해서 나는 오류이다.
+service랑 mapper.java를 다 boolean으로 설정해놨는데
+mapper.xml에서 boolean 이 아닌 int형으로 햇더니
+오류가 났다.
+boolean으로 바꿔주니 오류해결
+
+parameterType="HashMap"
+==========================================================================
+
+business-layer.xml 설정 관련 기록
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+	<!--  스프링 컨테이너가 생성할 객체 등록 -->
+
+
+	<!-- Annotation 기반의 IoC 설정 -->
+	<context:component-scan base-package="com.ssamz.biz"/>
+
+</beans>
+
+ 
+==========================================================================
+0521 성공 로그 기록
+
+
+5월 21, 2023 6:32:02 오후 org.apache.catalina.core.AprLifecycleListener lifecycleEvent
+정보: 프로덕션 환경들에서 최적의 성능을 제공하는, APR 기반 Apache Tomcat Native 라이브러리가, 다음 java.library.path에서 발견되지 않습니다: [C:\DEV\zulu11\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\DEV\zulu11\bin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files\Volta\;C:\oraclexe\app\oracle\product\11.2.0\server\bin;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\iCLS\;C:\Program Files\Intel\Intel(R) Management Engine Components\iCLS\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\PuTTY\;C:\Users\MSH\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files\MySQL\MySQL Server 8.0\bin;C:\Users\MSH\apache-tomcat-8.5.54\lib\jsp-api.jar;C:\Users\MSH\apache-tomcat-8.5.54\lib\servlet-api.jar;C:\data\db\bin;C:\Program Files\Git\cmd;C:\Program Files\nodejs\;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Program Files\spring-3.0.0;C;C:\Program Files\Java\java-se-8u42-ri;C:\Program Files\VisualSVN Server\bin;C:\Program Files\MySQL\MySQL Utilities 1.6\;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\MSH\AppData\Local\Volta\bin;C:\Users\MSH\anaconda3;C:\Users\MSH\anaconda3\Library\mingw-w64\bin;C:\Users\MSH\anaconda3\Library\usr\bin;C:\Users\MSH\anaconda3\Library\bin;C:\Users\MSH\anaconda3\Scripts;C:\Users\MSH\AppData\Local\Programs\Python\Python38\Scripts\;C:\Users\MSH\AppData\Local\Programs\Python\Python38\;C:\Users\MSH\AppData\Local\Programs\Python\Python38-32\Scripts\;C:\Users\MSH\AppData\Local\Programs\Python\Python38-32\;C:\Users\MSH\AppData\Local\Programs\Python\Python37-32\Scripts\;C:\Users\MSH\AppData\Local\Programs\Python\Python37-32\;C:\Users\MSH\AppData\Local\Microsoft\WindowsApps;C:\Program Files\JetBrains\PyCharm Community Edition 2019.1.3\bin;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2020.1\bin;C:\Program Files\JetBrains\IntelliJ IDEA 2020.1.2\bin;C:\apache-maven-3.6.3-bin\apache-maven-3.6.3\bin;C:\Users\MSH\AppData\Local\Programs\Microsoft VS Code\bin;C:\Program Files\Bandizip\;C:\U;C:\Program Files\JetBrains\IntelliJ IDEA 2022.2.3\bin;;C:\Program Files\Java\jdk-17.0.5;C:\Users\MSH\.dotnet\tools;C:\Program Files (x86)\ESTsoft\ALSee\x64;.]
+5월 21, 2023 6:32:04 오후 org.apache.coyote.AbstractProtocol init
+정보: 프로토콜 핸들러 ["http-nio-8080"]을(를) 초기화합니다.
+5월 21, 2023 6:32:08 오후 org.apache.catalina.startup.Catalina load
+정보: [7709] 밀리초 내에 서버가 초기화되었습니다.
+5월 21, 2023 6:32:09 오후 org.apache.catalina.core.StandardService startInternal
+정보: 서비스 [Catalina]을(를) 시작합니다.
+5월 21, 2023 6:32:09 오후 org.apache.catalina.core.StandardEngine startInternal
+정보: 서버 엔진을 시작합니다: [Apache Tomcat/9.0.46]
+5월 21, 2023 6:32:15 오후 org.apache.catalina.util.SessionIdGeneratorBase createSecureRandom
+경고: [SHA1PRNG] 알고리즘을 사용하여, 세션 ID를 생성하기 위한 SecureRandom 객체를 생성하는데, [4,725] 밀리초가 소요됐습니다.
+5월 21, 2023 6:32:38 오후 org.apache.jasper.servlet.TldScanner scanJars
+정보: 적어도 하나의 JAR가 TLD들을 찾기 위해 스캔되었으나 아무 것도 찾지 못했습니다. 스캔했으나 TLD가 없는 JAR들의 전체 목록을 보시려면, 로그 레벨을 디버그 레벨로 설정하십시오. 스캔 과정에서 불필요한 JAR들을 건너뛰면, 시스템 시작 시간과 JSP 컴파일 시간을 단축시킬 수 있습니다.
+5월 21, 2023 6:32:38 오후 org.apache.catalina.core.ApplicationContext log
+정보: No Spring WebApplicationInitializer types detected on classpath
+5월 21, 2023 6:32:39 오후 org.apache.catalina.core.ApplicationContext log
+정보: Initializing Spring root WebApplicationContext
+INFO : org.springframework.web.context.ContextLoader - Root WebApplicationContext: initialization started
+INFO : org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: SpringProject]
+INFO : org.hibernate.Version - HHH000412: Hibernate ORM core version 5.5.6
+INFO : org.hibernate.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+INFO : org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+Hibernate:
+
+    drop table if exists BOARD CASCADE
+Hibernate:
+
+    drop sequence if exists hibernate_sequence
+Hibernate: create sequence hibernate_sequence start with 1 increment by 1
+Hibernate:
+
+    create table BOARD (
+       seq integer not null,
+        cnt integer not null,
+        content varchar(255),
+        regDate date,
+        title varchar(255),
+        writer varchar(255),
+        primary key (seq)
+    )
+ 
+==========================================================================
+pom.xml에서 자바 버전 중복되어 오류
+
+==========================================================================
+실행환경은 자바 11 / 톰켓 9 을 맞춰놓고 실행환경 오류 해결 
+One or more constraints have not been satisfied.
+
+Dynamic Web Module 4.0 requires Java 1.8 or newer.
+
+	<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.5.1</version>
+				<configuration>
+					<source>11</source>
+					<target>11</target>
+					<compilerArgument>-Xlint:all</compilerArgument>
+					<showWarnings>true</showWarnings>
+					<showDeprecation>true</showDeprecation>
+				</configuration>
+			</plugin>
+
+java.lang.NoClassDefFoundError: javax/servlet/ServletContextListener
+
+tomcat10 버전을 사용했는데 javax가 tomcat9까지 지원한다고 해서
+
+9로 다운그레이드 해서 해결했다!
+
+ 
+
+===========================================================================> 
+0521_밤10시23분 우선 실행은 됨 : 게시판 프로그램 화면까지는 뜸 > 로그인까지 뜸
+
+login.do 에서
+ Message: Handler dispatch failed; nested exception is java.lang.NoSuchMethodError: 'java.lang.Object org.springframework.transaction.support.TransactionSynchronizationManager.unbindResourceIfPossible(java.lang.Object)'
+
+
+ modify한 코드 위치 : F:\2023\springproject_alpha_pre_backup\src\main\java\com\min\project
+
+
+
+
+==========================================================================
+TransactionSynchronizationManager 가 MemberVO와 관련이 있는것 같아서 Member 소스를 JPA entityMapping 했으나 오류 발생
+
+ Could not publish server configuration for Tomcat v9.0 Server at localhost.
+Multiple Contexts have a path of "/biz".
+
+ERROR: org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Failed to initialize JPA EntityManagerFactory: No identifier specified for entity: com.min.biz.member.MemberVO
+ERROR: org.springframework.web.context.ContextLoader - Context initialization failed
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactoryBean' defined in class path resource [business-layer.xml]: Invocation of init method failed; nested exception is org.hibernate.AnnotationException: No identifier specified for entity: com.min.biz.member.MemberVO
+
+
+
+
+java.map > bootstrap.jar 문제 해결방법 
+
+c:DEV>eclipse>springproject_success 마이그레이션
+
+
+WARN : org.springframework.web.servlet.PageNotFound - No mapping for GET /biz/login.do
+
+
+> web.xml 수정
+
+
+
+share the same JPA entity name
+
+java.lang.NoClassDefFoundError: javax/servlet/ServletContextListener
+
+5월 21, 2023 5:31:24 오후 org.apache.catalina.loader.WebappClassLoaderBase clearReferencesObjectStreamClassCaches
+경고: 웹 애플리케이션 [biz]을(를) 위해, ObjectStreamClass$Caches로부터 soft references를 폐기하지 못했습니다.
+
+java.lang.ClassCastException: class java.io.ObjectStreamClass$Caches$1 cannot be cast to class java.util.Map (java.io.ObjectStreamClass$Caches$1 and java.util.Map are in module java.base of loader 'bootstrap')
+
+
+
+
+=================================================
+
+----------> TODO 리스트
+
+login_proc , ExcelPage1, AopAfter 코드 해석하기 > 주석 넣기
+ㅔㅕㅣㅣ
+
+
+카탈리나가뭐지??
+
+
+
+
+
+
+
+
+
+
+
+
+
+
