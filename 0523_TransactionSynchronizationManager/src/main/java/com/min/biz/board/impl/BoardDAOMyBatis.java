@@ -10,39 +10,38 @@ import com.min.biz.board.BoardVO;
 
 // DAO(Data Access Object)
 @Repository
-public class BoardDAOMyBatis {
-	
+public class BoardDAOMyBatis {	
 	@Autowired
 	private SqlSessionTemplate mybatis;
 
-	// CRUD ����� �޼ҵ� ����
-	// �� ���
+	// CRUD  ޼ 
+	//  
 	public void insertBoard(BoardVO vo) {
-		System.out.println("===> MyBatis�� insertBoard() ��� ó��");
+		System.out.println("===> MyBatis insertBoard()  ");
 		mybatis.insert("BoardDAO.insertBoard", vo);
 	}
 
-	// �� ����
+	//  
 	public void updateBoard(BoardVO vo) {
-		System.out.println("===> MyBatis�� updateBoard() ��� ó��");
+		System.out.println("===> MyBatis updateBoard()  ");
 		mybatis.update("BoardDAO.updateBoard", vo);
 	}
 
-	// �� ����
+	//  
 	public void deleteBoard(BoardVO vo) {
-		System.out.println("===> MyBatis�� deleteBoard() ��� ó��");
+		System.out.println("===> MyBatis deleteBoard()  ");
 		mybatis.delete("BoardDAO.deleteBoard", vo);
 	}
 
-	// �� �� ��ȸ
+	//    
 	public BoardVO getBoard(BoardVO vo) {
-		System.out.println("===> MyBatis�� getBoard() ��� ó��");
-		return mybatis.selectOne("BoardDAO.getBoard", vo);
+		System.out.println("===> MyBatis getBoard()  ");
+		return (BoardVO) mybatis.selectOne("BoardDAO.getBoard", vo);
 	}
 
-	// �� ��� ��ȸ
+	//   ȸ
 	public List<BoardVO> getBoardList(BoardVO vo) {
-		System.out.println("===> MyBatis�� getBoardList() ��� ó��");
+		System.out.println("===> MyBatis getBoardList()  ");
 		return mybatis.selectList("BoardDAO.getBoardList", vo);	
 	}
 }

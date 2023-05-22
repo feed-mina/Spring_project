@@ -364,10 +364,17 @@ Resource만 쓰던가 @Qualifier로 이름을 지정해야돼요
 또는
 @Resource(name="객체이름")
 	
+BoardVO에 @JsonIgnore 빼먹음 > 추가	
 		
 		
-		
-		
+WARN : org.springframework.web.context.support.XmlWebApplicationContext 
+- Exception encountered during context initialization 
+- cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: 
+Error creating bean with name 'boardDAOMyBatis': 
+Unsatisfied dependency expressed through field 'mybatis'; 
+nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: 
+No qualifying bean of type 'org.mybatis.spring.SqlSessionTemplate' available: 
+expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}		
 		
 		
 		

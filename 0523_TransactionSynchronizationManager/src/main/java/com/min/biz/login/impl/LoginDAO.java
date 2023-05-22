@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import com.min.biz.cmm.AbstractDAO;
 import com.min.biz.login.LoginVO;
 
-@Repository("LoginDAO")
+@Repository
 public class LoginDAO extends AbstractDAO {
 
 	// 회원 정보 가져오기

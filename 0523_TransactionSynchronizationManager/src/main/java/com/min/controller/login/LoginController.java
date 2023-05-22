@@ -9,12 +9,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.json.MappingJacksonJsonView;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import com.min.biz.login.LoginService;
 import com.min.biz.login.LoginVO;
@@ -23,7 +25,10 @@ import com.min.biz.login.LoginVO;
 public class LoginController {
 
 	// 로그인페이지
-	@Resource(name="LoginService")
+	//@Resource(name="LoginService")
+	
+	@Autowired
+	@Qualifier("LoginService")
 	private LoginService  LoginService;
 
 	@RequestMapping(value="/login/LoginPage.do")
@@ -57,7 +62,8 @@ public class LoginController {
 
 
 	//로그인을 처리한다
-	@Resource MappingJacksonJsonView ajaxLoginActive;
+	// @Resource MappingJackson2JsonView ajaxLoginActive;
+	@Autowired MappingJackson2JsonView ajaxLoginActive;
 	@RequestMapping(value="/login/LoginActive.do")
 	public ModelAndView getLoginActive(
 			@ModelAttribute("LoginVO") LoginVO LoginVO, 
