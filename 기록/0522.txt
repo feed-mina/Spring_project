@@ -121,8 +121,8 @@ login.do 에서
 
 
  modify한 코드 위치 : F:\2023\springproject_alpha_pre_backup\src\main\java\com\min\project
-
-
+현재 기준 프로젝트 : C:\DEV\eclipse-workspace\git\Spring_project\0522_TransactionSynchronizationManager
+실행환경은 자바 11 / 톰켓 9
 
 
 ==========================================================================
@@ -164,11 +164,34 @@ java.lang.ClassCastException: class java.io.ObjectStreamClass$Caches$1 cannot be
 
 =================================================
 
+프로젝트 우클릭 > Properties 
+1. Project Facets : Java 11 , runtime zulu11
+2. JavaBuildPath : Libraries 에서 톰켓 9 관련 jar 추가 , order and Export 에서 JRE JAVA11 이랑 jar apply
+
+3. Project 탭 > clean 
+4. 프로젝트 우클릭 > Maven > update
+5. Servers 더블클릭 > Timeout > start 100
+
+
+
+====================================================
+0523
+
+jsp 오류 : <jsp:include page="project/LodVariablePage.do" flush="false">
+에서 page 경로 수정 필요
+
+
+import org.springframework.web.servlet.view.json.MappingJacksonJsonView;
+:: Maven dependency가 로드가 안되서 login/LoginPage 에서 오류 발생 
+
+
+
+
+
 ----------> TODO 리스트
 
 login_proc , ExcelPage1, AopAfter 코드 해석하기 > 주석 넣기
-ㅔㅕㅣㅣ
-
+ 
 
 카탈리나가뭐지??
 
