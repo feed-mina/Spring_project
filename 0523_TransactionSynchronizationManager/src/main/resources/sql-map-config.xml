@@ -9,9 +9,9 @@
 		<typeAlias alias="board" type="com.min.biz.board.BoardVO"/>
 	</typeAliases>
 	
-	<!-- SQL Mapper 등록 -->
+	<!-- SQL Mapper 등록 
 	<mappers>
 		<mapper resource="mappings/board-mapping.xml"/>
 	</mappers>	
-	
+	-->
 </configuration>

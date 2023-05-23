@@ -376,13 +376,318 @@ nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionExcept
 No qualifying bean of type 'org.mybatis.spring.SqlSessionTemplate' available: 
 expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}		
 		
+경고: org.springframework.web.context.support.XmlWebApplicationContext
+- 컨텍스트 초기화 중에 예외가 발생했습니다.
+- 새로 고침 시도 취소: org.springframework.beans.factory.UnsatisfiedDependencyException:
+이름이 'boardDAOMyBatis'인 빈 생성 오류:
+'mybatis' 필드를 통해 표현되는 충족되지 않은 종속성;
+중첩 예외는 org.springframework.beans.factory.NoSuchBeanDefinitionException입니다.
+사용 가능한 'org.mybatis.spring.SqlSessionTemplate' 유형의 적격 빈이 없습니다.
+autowire 후보로 적합한 최소 1개의 bean이 예상됩니다. 종속성 주석: {@org.springframework.beans.factory.annotation.Autowired(required=true)}		
 		
+1. Dao의 class 상단의 어노테이션 확인 @Repository 또는 @Service
+2. xml에 bean으로 등록 dao, sql 
+3. 코드추가
+<bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactorBean">
+			<property name="dataSource" ref="dataSource" />
+			<property name="configLocation" value="classpath:mybatis-config.xml">
+			</bean>
+			
+				<bean id="SqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+					<constructor-arg index="0" ref="sqlSession"/>
+			</bean>
+			<context:component-scan base-package="myybean">
+				<context:exclude-filter type="annotation" expression="org.springframework.sterotype.Controller"/>
+			</context:component-scan>
+4.mybatis와 mybatis-spring 버전이 맞지 않아서 생김
+
+<!-- https://mvnrepository.com/artifact/org.mybatis/mybatis-spring -->
+<dependency>
+    <groupId>org.mybatis</groupId>
+    <artifactId>mybatis-spring</artifactId>
+    <version>1.2.4</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/org.mybatis/mybatis-spring -->
+<dependency>
+    <groupId>org.mybatis</groupId>
+    <artifactId>mybatis-spring</artifactId>
+    <version>3.0.2</version>
+</dependency>
+
+<!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
+<dependency>
+    <groupId>org.mybatis</groupId>
+    <artifactId>mybatis</artifactId>
+    <version>3.3.1</version>
+</dependency>
+
+5. @Autowired 주입 실패 : Mapper를 제대로 받지 못해서 생김 -> root-context.xml에 <mybatis-spring:scan base-package="com.firstspring.web.mapper"/>
+root-context.xml 위에 mybatis base-package 추가		
+		
+		<mybatis-spring:scan
+		base-package="org.zerock.mapper" /> <!--추가-->
+
+	<context:component-scan
+		base-package="org.zerock.sample"></context:component-scan>
+		
+6. root-context.xml 파일에 다음 추가    
+
+ <!--HikariCP Configration-->
+        <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+        <constructor-arg ref="hikariConfig"/>
+        </bean>
+        <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"></property>
+        </bean>
+        
+        <mybatis-spring:scan base-package="org.zeorck.mapper"/>
+        
+        <context:component-scan base-package="org.zeorck.sample"></context:component-scan>
+	
+
+*	https://lifere.tistory.com/117
+		
+*	https://velog.io/@virtualplastic/Spring-08-%EC%98%81%EC%86%8D%EB%B9%84%EC%A6%88%EB%8B%88%EC%8A%A4-%EA%B3%84%EC%B8%B5%EC%9D%98-CRUD-%EA%B5%AC%ED%98%84
+		src/main/resource 폴더에 org > zerock > mapper 폴더에 TimeMapper.xml 파일 
+
+*https://tadaktadak-it.tistory.com/107
+
+* https://mybatis.org/spring/ko/mappers.html#register //https://codingnojam.tistory.com/27
+
+* https://gongzza.github.io/java/spring/spring-mybatis-h2-localtest/
+
+* https://dololak.tistory.com/21 : 스프링 모듈 20가지 
+
+그 중 asm 모듈은
+ 
+
+
+ASM
+ASM 모듈은 엄밀히 말해 스프링 모듈이 아닙니다.
+ASM 모듈은 클래스 바이트코드 조작 및 분석 프레임워크인 ASM을 재 패키징한 모듈입니다.
+ASM 프레임워크는 스프링 뿐 아니라 여러 프레임워크에서 및 라이브러리에서 사용되는데 이때 스프링 프레임워크와
+ASM을 사용하는 다른 프레임워크와의 충돌을 방지하기 위해 org.springframework.asm 패키지로 재패키징해 독립적인 모듈로 제공합니다.
+
+ 
+ 	
+ 	
+ 		
+ 	<!-- Mybatis설정
+ 	     <mybatis-spring:scan base-package="com.min.biz.mapper" annotation="org.apache.ibatis.annotations.Mapper"/>
+         -->
+      <!-- MapperScannerConfigurer 사용 
+        <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        	<property name="beanPackage" value="com.min.biz.mapper"/>
+        	<property name="annotationClass" value="org.apache.ibatis.annotations.Mapper"/> 
+        </bean>
+7.log4jdbc-log4j2 설정을[spring] MyBatis 연동하기
+ 업데이트: May 23, 2021
+
+
+8. Todo : MyMapper 예시만들기
+9. log4jdbc 설정 
+
+log4jdbc.log4j2.properties 파일 설정 
+log4jdbc.spylogdelegator.name=net.sf.log4jdbc.log.slf4j.Slf4jSpyLogDelegator
+log4jdbc.dump.sql.maxlinelength=0
+
+pom.xml -> log4jdbc 관련
+
+<!-- log4j2 -->
+		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+			<version>2.17.2</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.17.2</version>
+		</dependency>
+
+
+		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>2.17.2</version>
+		</dependency>
+ 
+log4jdbc-log4j2 설정
+MyBatis는 내부적으로 JDBC의 PreparedStatement를 이용해서 SQL을 처리한다. 따라서 SQL에 전달되는 파라미터는 JDBC에서와 같이 ‘?’로 치환되어 처리된다. 이럴 경우 값이 제대로 처리 되었는지 확인하기가 쉽지 않고, 실행된 SQL의 내용을 정확히 확인하기 어렵다. SQL 로그를 제대로 보기 위해서는 log4jdbc-log4j2 라이브러리를 사용해야 한다.
+
+<!-- pom.xml -->
+
+
+<!-- https://mvnrepository.com/artifact/org.bgee.log4jdbc-log4j2/log4jdbc-log4j2-jdbc4 -->
+<dependency>
+    <groupId>org.bgee.log4jdbc-log4j2</groupId>
+    <artifactId>log4jdbc-log4j2-jdbc4</artifactId>
+    <version>1.16</version>
+</dependency>
+
+mybatis는 내부적으로 jdbc의 preparedStatement를 이용해서 sql을 처리 
+sql전달되는 파라미터는 JDBC와 같이 ?로 치환되어 처리, 이럴 경우 값이 제대로 처리되었는지 확인하기가 쉽지 않다 . 	
 		
 		
 		
 		
 		
 ==================================================================================
+
+----------> 
+		
+그럼에도 불구하고 이 오류가 뜸...		
+5월 23, 2023 7:36:13 오후 org.apache.catalina.core.ApplicationContext log
+심각: 서블릿 [appServlet]을(를) 위한 Servlet.init() 호출이 예외를 발생시켰습니다.
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'boardDAOMyBatis': Unsatisfied dependency expressed through field 'mybatis'; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'org.mybatis.spring.SqlSessionTemplate' available: expecte
+		
+==================================================================================
+
+
+
+
+
+
+
+board-mapping.xml 
+<mapper namespace="Board">
+
+
+19:55:34.128 [main] ERROR org.springframework.web.servlet.DispatcherServlet - Context initialization failed
+org.springframework.beans.factory.UnsatisfiedDependencyException:
+ Error creating bean with name 'boardDAOMyBatis': 
+ Unsatisfied dependency expressed through field 'mybatis';
+ nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: 
+ No qualifying bean of type 'org.mybatis.spring.SqlSessionTemplate' available: 
+ expected at least 1 bean which qualifies as autowire candidate. 
+ Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+	
+
+board-mapping.xml 
+<mapper namespace="BoardDAO">
+
+5월 23, 2023 7:57:23 오후 org.apache.catalina.core.ApplicationContext log
+심각: 서블릿 [appServlet]을(를) 위한 Servlet.init() 호출이 예외를 발생시켰습니다.
+org.springframework.beans.factory.UnsatisfiedDependencyException: 
+Error creating bean with name 'boardDAOMyBatis': Unsatisfied dependency expressed through field 'mybatis'; 
+nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: 
+No qualifying bean of type 'org.mybatis.spring.SqlSessionTemplate' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+
+<mapper namespace="BoardDAOMybatis">
+
+5월 23, 2023 7:59:30 오후 org.apache.catalina.core.ApplicationContext log
+심각: 서블릿 [appServlet]을(를) 위한 Servlet.init() 호출이 예외를 발생시켰습니다.
+org.springframework.beans.factory.UnsatisfiedDependencyException: 
+Error creating bean with name 'boardDAOMyBatis': 
+Unsatisfied dependency expressed through field 'mybatis'; 
+nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: 
+No qualifying bean of type 'org.mybatis.spring.SqlSessionTemplate' available:
+ expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+
+* repository 와 Mapper의 차이 
+https://pamyferret.tistory.com/69
+
+MVC에서 repository, mapper를 적용해보면 아래와 같이 구현하고자 하는 구조에 따라서 유동적으로 선택해서 사용하면 된다. Mapper만 썼으니 잘못됐어! Mapper 클래스 없이 Repository만 썼으니 잘못됐어! 이런건 없다.
+
+- Controller -> Service -> Repository -> mapper.xml
+
+- Controller -> Service -> Repository -> Mapper -> mapper.xml
+
+- Controller -> Service -> Mapper -> mapper.xml
+
+ 
+
+    <tx:annotation-driven transaction-manager="transactionManager" />
+ 
+    <beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <beans:property name="driverClassName" value="org.mariadb.jdbc.Driver" />
+        <beans:property name="url" value="jdbc:mariadb://127.0.0.1:3306/test" />
+        <beans:property name="username" value="username" />
+        <beans:property name="password" value="password" />
+    </beans:bean>
+ 
+    <beans:bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <beans:property name="dataSource" ref="dataSource" />
+        <beans:property name="mapperLocations" value="classpath:query/*.xml" />
+        <beans:property name="configLocation" value="classpath:mybatis/mybatis-config.xml" />
+        <!--본인의 패키지 명으로 변경 -->
+        <beans:property name="typeAliasesPackage" value="com.yeopbox"/>
+    </beans:bean>
+ 
+    <beans:bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--본인의 패키지 명으로 변경 -->
+        <beans:property name="basePackage" value="com.yeopbox.**.mapper" />
+    </beans:bean>
+ 
+    <beans:bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <beans:property name="dataSource" ref="dataSource" />
+    </beans:bean>
+</beans:beans>
+
+
+resource/mybatis 경로에 mybatis-config.xml 파일을 생성한 뒤 아래 항목을 복사해 줍니다.
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <setting name="cacheEnabled" value="true" />
+        <setting name="lazyLoadingEnabled" value="false" />
+        <setting name="multipleResultSetsEnabled" value="true" />
+        <setting name="useColumnLabel" value="true" />
+        <setting name="useGeneratedKeys" value="false" />
+        <setting name="defaultExecutorType" value="SIMPLE" />
+        <setting name="defaultStatementTimeout" value="60000" />
+        <setting name="safeRowBoundsEnabled" value="false" />
+        <setting name="mapUnderscoreToCamelCase" value="false" />
+        <setting name="localCacheScope" value="SESSION" />
+        <setting name="jdbcTypeForNull" value="VARCHAR" />
+        <setting name="lazyLoadTriggerMethods" value="equals,clone,hashCode,toString" />
+    </settings>
+</configuration>
+
+
+
+resource/query 경로에 main.xml이라는 매퍼 XML 파일을 생성합니다.
+
+getCurTime은 현재 DB의 시간을 받아오는 쿼리로 간단하게 만들어 보았습니다.
+
+main.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yeopbox.main.mapper.MainMapper">
+    <select id="getCurTime" resultType="mainVo">
+        select current_timestamp as curTime
+    </select>
+</mapper>
+
+
+* https://yeopbox.com/spring-mybatis%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%98%EC%97%AC-db-%EC%97%B0%EA%B2%B0%ED%95%98%EA%B8%B0/
+
+
+
+<select id="getGood" resultType="mybatis.Good 또는 java.util.Map" parameterType="java.lang.Integer">
+select code, name, manufacture, price
+from goods
+where code=#{code}
+</select>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ----------> TODO 리스트
 
