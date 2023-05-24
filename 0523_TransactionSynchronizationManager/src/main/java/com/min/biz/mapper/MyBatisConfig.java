@@ -1,26 +1,52 @@
 package com.min.biz.mapper;
 
-import java.io.InputStream;
+import java.io.IOException;
+import java.io.Reader;
 
 import javax.sql.DataSource;
 
-import org.apache.ibatis.builder.xml.XMLConfigBuilder;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
+import org.mybatis.spring.mapper.MapperFactoryBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
+import com.ibatis.common.resources.Resources;
+
 
 @Configuration
 @MapperScan("com.min.biz.mapper")
 public class MyBatisConfig {
 	
-	  
+	 private static Logger log = LoggerFactory.getLogger(MyBatisConfig.class);
+	 private static SqlSessionFactory factory;
+	 
+		static {
+	        try {
+	        	String resource = "./MyBatisConfig.xml";
+	        	Reader reader = Resources.getResourceAsReader(resource);
+	            factory = new SqlSessionFactoryBuilder()
+	                    .build(reader);
+	        } catch (IOException e) {
+	            log.info(">>> Mybatis configuration Error");
+	            e.printStackTrace();
+	        }
+	    }
+	    public static SqlSessionFactory getFactory() {
+	        return factory;
+	    }	  
+
+	 
+	 
+	    /*
     @Bean
     public org.apache.ibatis.session.Configuration myBatisConfiguration() throws Exception {
     	String configFile = "mybatis-config.xml"; // 설정 파일의 경로 또는 파일 이름
@@ -39,6 +65,7 @@ public class MyBatisConfig {
 	// 세 번째 인수: 추가적인 MyBatis 구성을 위한 프로퍼티 (옵션)
 
 	// 필요에 따라 configBuilder를 사용하여 MyBatis 구성을 수정하거나 정보를 추출할 수 있음
+	 **/
 	@Bean
 	    public DataSource dataSource() {
 	        DriverManagerDataSource jdbc = new DriverManagerDataSource();
@@ -50,14 +77,15 @@ public class MyBatisConfig {
 	        return jdbc;
 	  }
 	  
-	  
-	  // SqlSessionFactoryBean 빈 정의 예시
+
+    
+    // SqlSessionFactoryBean 빈 정의 예시
 	    @Bean
 	    public SqlSessionFactory sqlSessionFactory() throws Exception {
 	        SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
 	        sessionFactory.setDataSource(dataSource());
 
-	        Resource configLocation = new ClassPathResource("classpath:sql-map-config.xml");
+	        Resource configLocation = new ClassPathResource("classpath:MyBatisConfig.xml");
 	        sessionFactory.setConfigLocation(configLocation);
 
 	        return sessionFactory.getObject();
@@ -67,4 +95,8 @@ public class MyBatisConfig {
 	    public SqlSessionTemplate sqlSession(SqlSessionFactory sqlSessionFactory) {
 	        return new SqlSessionTemplate(sqlSessionFactory);
 	    }
+	    
+	     
+	    
+	    
 }

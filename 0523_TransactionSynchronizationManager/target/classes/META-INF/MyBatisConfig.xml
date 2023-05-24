@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<!-- Properties파일설정 -->
+	<properties resource="datasource.properties" />
+
+
+	<!-- Alias 설정 -->
+	<typeAliases>
+		<typeAlias alias="board" type="com.min.biz.board.BoardVO" />
+	</typeAliases>
+
+	<!-- SQL Mapper 등록 -->
+	<mappers>
+		<mapper resource="mappings/board-mapping.xml" />
+	</mappers>
+	
+ 
+
+</configuration>

@@ -11,10 +11,7 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
 
-
-	<!-- * com.min.biz..*Impl.*(..)) -->
-
-
+ 
 	<!-- Annotation 기반의 AOP 설정 -->
 	<aop:aspectj-autoproxy />
 
@@ -22,6 +19,10 @@
 		<bean id="entityManagerFactoryBean" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"> 
 		<property name="jpaVendorAdapter" ref="jpaVendorAdapter"/> <property name="dataSource" 
 		ref="dataSource"/> </bean> -->
+	<!-- JdbcTemplate 등록 -->
+	<bean class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
 
 	<!-- DataSource 등록 -->
 	<context:property-placeholder
@@ -35,26 +36,31 @@
 		<property name="username" value="${jdbc.username}" />
 		<property name="password" value="${jdbc.password}" />
 	</bean>
+	
+	<!-- MyBatis에서 가장 핵심적인 객체는 SqlSession이라는 존재와 SqlSessionFactoryBean이다. -->
 
 	<!-- Spring과 MyBatis 연동 설정 -->
 	<bean id="sqlSessionFactory"
 		class="org.mybatis.spring.SqlSessionFactoryBean">
 
-		<property name="dataSource" ref="dataSource" />
 		<property name="configLocation"
-			value="classpath:sql-map-config.xml" />
+			value="classpath:/META-INF/MyBatisConfig.xml" />
 		<property name="mapperLocations"
-			value="classpath:/mappings/*board-mapping.xml" />
+			value="classpath*:/mappings/*mapping.xml" />
+		<property name="dataSource" ref="dataSource" />
 		<property name="typeAliasesPackage" value="com.min.biz" />
 	</bean>
 
 
 <!-- sqlSessionTemplate -->
-	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
+	<bean id="SqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate" >
+		<qualifier value="SqlSessionTemplate"/>
 		<constructor-arg  ref="sqlSessionFactory" />
 	</bean>
 
-
+<bean id="boardDAO" class="com.min.biz.board.impl.BoardDAOMyBatis">
+	<constructor-arg ref="SqlSessionTemplate"/>
+</bean>
 	<!-- Annotation 기반의 IoC 설정 -->
 	<context:component-scan
 		base-package="com.min.biz"/>
@@ -64,23 +70,7 @@
 	<mybatis-spring:scan
 		base-package="com.min.biz.mapper" annotation="org.apache.ibatis.annotations.Mapper" />
 
-<bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-  <property name="mapperInterface" value="org.mybatis.spring.sample.mapper.UserMapper" />
-  <property name="sqlSessionFactory" ref="sqlSessionFactory" />
-</bean>
-
-	<!-- mybatis mapper auto scanning -->
-	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.min.biz.mapper" />
-		<property name="annotationClass" value="org.apache.ibatis.annotations.Mapper" />
-	</bean>
  
-
-
-	<!-- JdbcTemplate 등록 -->
-	<bean class="org.springframework.jdbc.core.JdbcTemplate">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
 
 	<!-- Transaction 설정 -->
 	<bean id="txManager"
@@ -101,20 +91,7 @@
 		<aop:advisor pointcut-ref="txPointcut"
 			advice-ref="txAdvice" />
 	</aop:config>
-
-	<!-- 횡단관심에 해당하는 Advice 클래스를 등록한다. <bean id="log" class="com.ssamz.biz.common.LogAdvice"/> 
-		<bean id="afterReturning" class="com.ssamz.biz.common.AfterReturningAdvice"/> 
-		<bean id="afterThrowing" class="com.ssamz.biz.common.AfterThrowingAdvice"/> -->
-
-	<!-- AOP 설정 <aop:config> <aop:pointcut id="allPointcut" expression="execution(* 
-		com.ssamz.biz..*Impl.*(..))"/> <aop:pointcut id="getPointcut" expression="execution(* 
-		com.ssamz.biz..*Impl.get*(..))"/> <aop:aspect ref="log"> <aop:before pointcut-ref="allPointcut" 
-		method="printLog"/> </aop:aspect> <aop:aspect ref="afterReturning"> <aop:after-returning 
-		pointcut-ref="getPointcut" method="afterLog" returning="returnObj"/> </aop:aspect> 
-		<aop:aspect ref="afterThrowing"> <aop:after-throwing pointcut-ref="allPointcut" 
-		method="exceptionLog" throwing="exceptionObj"/> </aop:aspect> <aop:aspect 
-		ref="around"> <aop:around pointcut-ref="allPointcut" method="aroundLog"/> 
-		</aop:aspect> </aop:config> -->
+ 
 
 </beans>
 

@@ -1,0 +1,147 @@
+package com.min.biz.mapper;
+
+import java.io.InputStream;
+
+import javax.sql.DataSource;
+
+import org.apache.ibatis.builder.xml.XMLConfigBuilder;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+
+
+@Configuration
+@MapperScan("com.min.biz.mapper")
+public class MyBatisConfig {
+	
+	  
+    @Bean
+    public org.apache.ibatis.session.Configuration myBatisConfiguration() throws Exception {
+    	String configFile = "mybatis-config.xml"; // 설정 파일의 경로 또는 파일 이름
+    	ClassPathResource resource = new ClassPathResource(configFile); // 설정 파일을 읽을 수 있는 ClassPathResource 객체 생성
+    	InputStream inputStream = resource.getInputStream(); // 설정 파일의 InputStream을 가져옴
+
+    	// 첫 번째 인수: 설정 파일을 읽을 수 있는 InputStream
+    	// 두 번째 인수: 설정 파일의 경로 또는 파일 이름
+
+    	
+    	XMLConfigBuilder configBuilder = new XMLConfigBuilder(inputStream, configFile);
+        return configBuilder.parse();
+    }
+    
+
+	// 세 번째 인수: 추가적인 MyBatis 구성을 위한 프로퍼티 (옵션)
+
+	// 필요에 따라 configBuilder를 사용하여 MyBatis 구성을 수정하거나 정보를 추출할 수 있음
+	@Bean
+	    public DataSource dataSource() {
+	        DriverManagerDataSource jdbc = new DriverManagerDataSource();
+	        		jdbc.setDriverClassName("org.h2.Driver");
+	        		jdbc.setUrl("jdbc:h2:tcp://localhost/~/test");
+	        		jdbc.setUsername("sa");
+	        		jdbc.setPassword("");
+		  
+	        return jdbc;
+	  }
+	  
+	  
+	  // SqlSessionFactoryBean 빈 정의 예시
+	    @Bean
+	    public SqlSessionFactory sqlSessionFactory() throws Exception {
+	        SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
+	        sessionFactory.setDataSource(dataSource());
+
+	        Resource configLocation = new ClassPathResource("classpath:MyBatisConfig.xml");
+	        sessionFactory.setConfigLocation(configLocation);
+
+	        return sessionFactory.getObject();
+	    }
+	    
+	    @Bean
+	    public SqlSessionTemplate sqlSession(SqlSessionFactory sqlSessionFactory) {
+	        return new SqlSessionTemplate(sqlSessionFactory);
+	    }
+}
+
+
+
+=============================================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+5월 24, 2023 10:40:47 오후 org.apache.catalina.core.StandardContext listenerStart
+심각: Context initialized 이벤트를 [org.springframework.web.context.ContextLoaderListener] 클래스의 인스턴스인 리스너에 전송하는 동안 예외 발생
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [business-layer.xml]: Initialization of bean failed; nested exception is java.lang.reflect.MalformedParameterizedTypeException
+
+
+Caused by: java.lang.reflect.MalformedParameterizedTypeException
+
+
+
+5월 24, 2023 10:40:47 오후 org.apache.catalina.core.StandardContext startInternal
+심각: 하나 이상의 리스너들이 시작하지 못했습니다. 상세 내역은 적절한 컨테이너 로그 파일에서 찾을 수 있습니다.
+5월 24, 2023 10:40:47 오후 org.apache.catalina.core.StandardContext startInternal
+심각: 이전 오류들로 인해 컨텍스트 [/biz]의 시작이 실패했습니다.
+5월 24, 2023 10:40:47 오후 org.apache.catalina.core.ApplicationContext log
+정보: Closing Spring root WebApplicationContext
+5월 24, 2023 10:40:47 오후 org.apache.catalina.loader.WebappClassLoaderBase clearReferencesObjectStreamClassCaches
+경고: 웹 애플리케이션 [biz]을(를) 위해, ObjectStreamClass$Caches로부터 soft references를 폐기하지 못했습니다.
+java.lang.ClassCastException: class java.io.ObjectStreamClass$Caches$1 cannot be cast to class java.util.Map (java.io.ObjectStreamClass$Caches$1 and java.util.Map are in module java.base of loader 'bootstrap')
+
+
+
+
+
+
+
+
+
+
+----------> TODO 리스트
+
+
+카탈리나가뭐지?
+
+아파치 카탈리나 : 톰켓에서 core 컴포넌트 를 의미 (서버에서 오류가 나면 톰켓에서 오류가 나는거고 그래서 카탈리나 에러도 같이 뜬다.)
+
+ibatis와 mybatis 차이가 뭘까?
+결론적으로 둘의 역할은 같다고 보면 된다.
+ibatis 역사가 먼저 시작되었고 ibatis 버전이 올라가면서 마이바티스 로 이름이 바뀌었다.
+과거 jar 파일은 ibatis 를, 현재에는 mybatis를 사용한다고 보면 됨
+
+
+login_proc , ExcelPage1, AopAfter 코드 해석하기 > 주석 넣기
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1056,10 +1056,12 @@ org.springframework.beans.factory.BeanCreationException:
 Caused by: java.lang.reflect.MalformedParameterizedTypeException
 	at sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl.validateConstructorArguments(ParameterizedTypeImpl.java:59) ~[?:?]
 	
+java.lang.reflect.MalformedParameterizedTypeException
+시멘틱스적으로 부정한 파라미터화 된 형태가 형태의 인스턴스화를 필요로 하는 리플렉트 메서드에 의해 검출되었을 경우에 예외를 발생시킵니다. 예를 들어 파라미터화 된 형태에 대한 형태 인수의 수가 부정한 경우 등입니다.
 
 
 
-
+마이바티스 세ㅣㅌ응 걷어니개ㅗㅛ 
 
 
 
@@ -1090,7 +1092,12 @@ Caused by: java.lang.reflect.MalformedParameterizedTypeException
 ==============================================================================================
 
 
+business-layer.xml
 
+<bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+  <property name="mapperInterface" value="org.mybatis.spring.sample.mapper.UserMapper" />
+  <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+</bean>
 
 
 
