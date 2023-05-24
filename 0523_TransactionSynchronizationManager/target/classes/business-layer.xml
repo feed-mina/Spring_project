@@ -11,105 +11,111 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
 
-	
-    	<mybatis-spring:scan base-package="com.min.biz.mapper" />
-    	
-         <!-- mybatis mapper auto scanning -->
-         <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-         <property name="beanPackage" value="com.min.biz.**.MyBatis"/>
-         </bean>
-         <!-- * com.min.biz..*Impl.*(..)) -->
-     
- 	<!-- Annotation 기반의 IoC 설정 -->
- 	<context:component-scan base-package="com.min.biz">
- 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
- 	</context:component-scan>
- 	
- 	<!-- Annotation 기반의 AOP 설정 -->
- 	<aop:aspectj-autoproxy/>
-  	
- 	<!-- DataSource 등록 -->
- 	<context:property-placeholder location="classpath:datasource.properties"/>
- 	
- 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
- 		<property name="driverClassName" value="${jdbc.driverClassName}"/>
- 		<property name="url"             value="${jdbc.url}"/>
- 		<property name="username"        value="${jdbc.username}"/>
- 		<property name="password"        value="${jdbc.password}"/>
- 	</bean>	
- 	
- 	<!-- Spring과 JPA 연동 설정 
- 	<bean id="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"></bean> 
- 	
- 	<bean id="entityManagerFactoryBean" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
- 		<property name="jpaVendorAdapter" ref="jpaVendorAdapter"/>
- 		<property name="dataSource" ref="dataSource"/>
- 	</bean>
- 	-->
- 	<!-- Spring과 MyBatis 연동 설정 -->
- 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
- 	
- 		<property name="dataSource" ref="dataSource"/> 	
- 		<property name="configLocation" value="classpath:sql-map-config.xml"/>
- 		 <property name="mapperLocations" value ="classpath:/mappings/*.xml"/>
- 		  <property name="typeAliasesPackage" value="com.min.biz"/>
- 	</bean>
- 	
- 	<bean class="org.mybatis.spring.SqlSessionTemplate">
- 		<constructor-arg ref="sqlSession"/>
- 	</bean>
- 	
- 	<!-- JdbcTemplate 등록 -->
- 	<bean class="org.springframework.jdbc.core.JdbcTemplate">
- 		<property name="dataSource" ref="dataSource"/>
- 	</bean>
+
+	<!-- * com.min.biz..*Impl.*(..)) -->
+
+
+	<!-- Annotation 기반의 AOP 설정 -->
+	<aop:aspectj-autoproxy />
+
+	<!-- Spring과 JPA 연동 설정 <bean id="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"></bean> 
+		<bean id="entityManagerFactoryBean" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"> 
+		<property name="jpaVendorAdapter" ref="jpaVendorAdapter"/> <property name="dataSource" 
+		ref="dataSource"/> </bean> -->
+
+	<!-- DataSource 등록 -->
+	<context:property-placeholder
+		location="classpath:datasource.properties" />
+
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName"
+			value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+
+	<!-- Spring과 MyBatis 연동 설정 -->
+	<bean id="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation"
+			value="classpath:sql-map-config.xml" />
+		<property name="mapperLocations"
+			value="classpath:/mappings/*board-mapping.xml" />
+		<property name="typeAliasesPackage" value="com.min.biz" />
+	</bean>
+
+
+<!-- sqlSessionTemplate -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
+		<constructor-arg  ref="sqlSessionFactory" />
+	</bean>
+
+
+	<!-- Annotation 기반의 IoC 설정 -->
+	<context:component-scan
+		base-package="com.min.biz"/>
+	 
+<!-- mybatis-spring 설정 -->
+
+	<mybatis-spring:scan
+		base-package="com.min.biz.mapper" annotation="org.apache.ibatis.annotations.Mapper" />
+
+<bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+  <property name="mapperInterface" value="org.mybatis.spring.sample.mapper.UserMapper" />
+  <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+</bean>
+
+	<!-- mybatis mapper auto scanning -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.min.biz.mapper" />
+		<property name="annotationClass" value="org.apache.ibatis.annotations.Mapper" />
+	</bean>
  
- 	<!-- Transaction 설정 -->
- 	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
- 		<property name="dataSource" ref="dataSource"/>
- 	</bean>	
- 	
- 	<tx:advice id="txAdvice" transaction-manager="txManager">
- 		<tx:attributes>
- 			<tx:method name="*" rollback-for="Exception"/>
- 		</tx:attributes>
- 	</tx:advice>
- 	
- 	<aop:config>
- 		<aop:pointcut id="txPointcut" expression="execution(* com.min.biz..*Impl.*(..))"/>
- 		
- 		<aop:advisor pointcut-ref="txPointcut" advice-ref="txAdvice"/>
- 	</aop:config>
- 	
- 	<!-- 횡단관심에 해당하는 Advice 클래스를 등록한다. 
- 	<bean id="log"            class="com.ssamz.biz.common.LogAdvice"/>
- 	<bean id="afterReturning" class="com.ssamz.biz.common.AfterReturningAdvice"/>
- 	<bean id="afterThrowing"  class="com.ssamz.biz.common.AfterThrowingAdvice"/>
- 	-->
- 	
- 	<!-- AOP 설정 
- 	<aop:config>
- 		<aop:pointcut id="allPointcut" expression="execution(* com.ssamz.biz..*Impl.*(..))"/>
- 		<aop:pointcut id="getPointcut" expression="execution(* com.ssamz.biz..*Impl.get*(..))"/>
- 	
- 		<aop:aspect ref="log">
- 			<aop:before pointcut-ref="allPointcut" method="printLog"/>
- 		</aop:aspect>
- 		
- 		<aop:aspect ref="afterReturning">
- 			<aop:after-returning pointcut-ref="getPointcut" method="afterLog" returning="returnObj"/>
- 		</aop:aspect>
- 		
- 		<aop:aspect ref="afterThrowing">
- 			<aop:after-throwing pointcut-ref="allPointcut" method="exceptionLog" throwing="exceptionObj"/>
- 		</aop:aspect>
- 		
- 		<aop:aspect ref="around">
- 			<aop:around pointcut-ref="allPointcut" method="aroundLog"/>
- 		</aop:aspect>
- 	</aop:config>
- 	-->
- 	
+
+
+	<!-- JdbcTemplate 등록 -->
+	<bean class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- Transaction 설정 -->
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="*" rollback-for="Exception" />
+		</tx:attributes>
+	</tx:advice>
+
+	<aop:config>
+		<aop:pointcut id="txPointcut"
+			expression="execution(* com.min.biz..*Impl.*(..))" />
+
+		<aop:advisor pointcut-ref="txPointcut"
+			advice-ref="txAdvice" />
+	</aop:config>
+
+	<!-- 횡단관심에 해당하는 Advice 클래스를 등록한다. <bean id="log" class="com.ssamz.biz.common.LogAdvice"/> 
+		<bean id="afterReturning" class="com.ssamz.biz.common.AfterReturningAdvice"/> 
+		<bean id="afterThrowing" class="com.ssamz.biz.common.AfterThrowingAdvice"/> -->
+
+	<!-- AOP 설정 <aop:config> <aop:pointcut id="allPointcut" expression="execution(* 
+		com.ssamz.biz..*Impl.*(..))"/> <aop:pointcut id="getPointcut" expression="execution(* 
+		com.ssamz.biz..*Impl.get*(..))"/> <aop:aspect ref="log"> <aop:before pointcut-ref="allPointcut" 
+		method="printLog"/> </aop:aspect> <aop:aspect ref="afterReturning"> <aop:after-returning 
+		pointcut-ref="getPointcut" method="afterLog" returning="returnObj"/> </aop:aspect> 
+		<aop:aspect ref="afterThrowing"> <aop:after-throwing pointcut-ref="allPointcut" 
+		method="exceptionLog" throwing="exceptionObj"/> </aop:aspect> <aop:aspect 
+		ref="around"> <aop:around pointcut-ref="allPointcut" method="aroundLog"/> 
+		</aop:aspect> </aop:config> -->
+
 </beans>
 
 

@@ -2,47 +2,63 @@ package com.min.biz.board.impl;
 
 import java.util.List;
 
-import org.mybatis.spring.SqlSessionTemplate;
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import com.min.biz.board.BoardVO;
+import com.min.biz.mapper.BoardMapper;
 
 // DAO(Data Access Object)
-@Repository
-public class BoardDAOMyBatis {	
-	@Autowired
-	private SqlSessionTemplate mybatis;
+// @Repository
+
+@Component
+public class BoardDAOMyBatis implements BoardMapper{
+	private final SqlSession sqlSession;
+
+    @Autowired
+    public BoardDAOMyBatis(SqlSession sqlSession) {
+        this.sqlSession = sqlSession;
+    }
+
+	// @Autowired
+//	private SqlSession mybatis;
+	
+ 	private static String namespace="com.min.biz.board.impl.BoardDAOMyBatis";
+	
+	//	@Autowired
+	//private SqlSessionTemplate mybatis;
 
 	// CRUD  ޼ 
 	//  
+ 	@Override
 	public void insertBoard(BoardVO vo) {
 		System.out.println("===> MyBatis insertBoard()  ");
-		mybatis.insert("BoardDAO.insertBoard", vo);
+		sqlSession.insert("BoardMapper.insertBoard", vo);
 	}
 
-	//  
+ 	@Override  
 	public void updateBoard(BoardVO vo) {
 		System.out.println("===> MyBatis updateBoard()  ");
-		mybatis.update("BoardDAO.updateBoard", vo);
+		sqlSession.update("BoardMapper.updateBoard", vo);
 	}
 
-	//  
+ 	@Override 
 	public void deleteBoard(BoardVO vo) {
 		System.out.println("===> MyBatis deleteBoard()  ");
-		mybatis.delete("BoardDAO.deleteBoard", vo);
+		sqlSession.delete("BoardMapper.deleteBoard", vo);
 	}
 
-	//    
+ 	@Override
 	public BoardVO getBoard(BoardVO vo) {
 		System.out.println("===> MyBatis getBoard()  ");
-		return (BoardVO) mybatis.selectOne("BoardDAO.getBoard", vo);
+		return (BoardVO) sqlSession.selectOne("BoardMapper.getBoard", vo);
 	}
-
-	//   ȸ
+ 
+ 	@Override
 	public List<BoardVO> getBoardList(BoardVO vo) {
 		System.out.println("===> MyBatis getBoardList()  ");
-		return mybatis.selectList("BoardDAO.getBoardList", vo);	
+		return sqlSession.selectList("BoardMapper.getBoardList", vo);	
 	}
 }
 

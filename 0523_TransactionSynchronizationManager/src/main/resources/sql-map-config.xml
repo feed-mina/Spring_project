@@ -3,15 +3,36 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 
 <configuration>
+	<!-- Properties파일설정 -->
+	<properties resource="datasource.properties" />
+
 
 	<!-- Alias 설정 -->
 	<typeAliases>
-		<typeAlias alias="board" type="com.min.biz.board.BoardVO"/>
+		<typeAlias alias="board" type="com.min.biz.board.BoardVO" />
 	</typeAliases>
-	
-	<!-- SQL Mapper 등록 
+
+	<!-- SQL Mapper 등록 -->
 	<mappers>
-		<mapper resource="mappings/board-mapping.xml"/>
-	</mappers>	
-	-->
+		<mapper resource="mappings/board-mapping.xml" />
+	</mappers>
+	
+	<!-- 여러 환경설정 -->
+	<settings>
+		<setting name="cacheEnabled" value="true" />
+		<setting name="lazyLoadingEnabled" value="false" />
+		<setting name="multipleResultSetsEnabled" value="true" />
+		<setting name="useColumnLabel" value="true" />
+		<setting name="useGeneratedKeys" value="false" />
+		<setting name="defaultExecutorType" value="SIMPLE" />
+		<setting name="defaultStatementTimeout" value="60000" />
+		<setting name="safeRowBoundsEnabled" value="false" />
+		<setting name="mapUnderscoreToCamelCase" value="false" />
+		<setting name="localCacheScope" value="SESSION" />
+		<setting name="jdbcTypeForNull" value="VARCHAR" />
+		<setting name="lazyLoadTriggerMethods"
+			value="equals,clone,hashCode,toString" />
+	</settings>
+
+
 </configuration>

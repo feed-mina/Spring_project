@@ -15,6 +15,8 @@ public class BoardServiceImpl implements BoardService {
 	@Autowired // Type Injection
 	private BoardDAOMyBatis boardDAO;
 	
+	// private @Qualifier("BoardDAOMyBatis") boardDAO;
+	
 	public void insertBoard(BoardVO vo) {
 		boardDAO.insertBoard(vo);
 	}

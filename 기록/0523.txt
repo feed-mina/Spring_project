@@ -681,6 +681,424 @@ where code=#{code}
 
 
 
+* mybatis-spring:scan 역할 ??
+일반적으로 MyBatis에서 매퍼 인터페이스는 데이터베이스 테이블 또는 엔티티에 대한 CRUD(Create, Read, Update, Delete) 작업을 수행하기 위해 사용됩니다. 매퍼 인터페이스는 SQL 문장을 실행하는 메서드를 정의하고, 각 메서드는 데이터 조작에 필요한 파라미터를 받아 해당 동작을 수행합니다.
+
+@Mapper 어노테이션은 MyBatis와 스프링의 연동을 위해 사용되는 어노테이션입니다. 이 어노테이션은 MyBatis가 해당 인터페이스를 매퍼로 인식하고, 자동으로 매퍼 인스턴스를 생성하여 스프링 컨테이너에 등록해줍니다. 따라서 UserMapper 인터페이스에 @Mapper 어노테이션이 지정되어 있으므로, 이 인터페이스를 사용하기 위해 별도의 설정 없이 스프링에서 매퍼 인스턴스를 주입받을 수 있습니다.
+매퍼 인터페이스는 MyBatis에서 제공하는 XML 기반의 매퍼 파일과 대체될 수 있습니다. XML 매퍼 파일에는 매퍼 인터페이스와 동일한 SQL 문장들이 정의되어 있으며, 해당 인터페이스와 매퍼 파일은 일대일로 매핑될 수 있습니다. 매퍼 인터페이스를 사용하면 SQL 문장들을 자바 코드로 직접 작성하고 호출할 수 있으며, 매퍼 파일을 사용하면 SQL 문장들을 별도의 XML 파일에 작성하고 매퍼 인터페이스와 연결할 수 있습니다. 어느 방식을 선택할지는 개발자의 선호나 프로젝트 요구사항에 따라 결정됩니다.
+
+1. SqlSession을 주입받을 빈이 @Autowired 어노테이션 또는 생성자 주입을 통해 정확하게 주입되는지 확인합니다. 위의 예제에서는 BoardDAOMyBatis 클래스의 생성자에서 SqlSession을 주입받고 있습니다. 이때 SqlSession을 주입받기 위한 빈이 스프링 컨테이너에 등록되어 있어야 합니다.
+
+2. SqlSession을 주입받을 빈을 스프링 설정 파일이나 @Configuration 어노테이션이 적용된 클래스에서 등록해야 합니다. 예를 들어, SqlSession을 생성하는 팩토리 빈을 설정 파일에 등록하거나, @MapperScan 어노테이션이 적용된 클래스에서 SqlSession을 주입받을 수 있도록 설정해야 합니다.
+
+3. MyBatis의 설정과 관련하여 주의해야 할 점은 SqlSession을 생성하기 위한 SqlSessionFactory 빈이 스프링 컨테이너에 등록되어 있어야 한다는 것입니다. SqlSessionFactory는 SqlSession을 생성하는 팩토리 역할을 담당합니다. 이를 위해 MyBatis의 설정 파일인 mybatis-config.xml을 작성하고, 해당 설정 파일을 사용하여 SqlSessionFactoryBean 빈을 등록해야 합니다.
+
+
+
+@Configuration 어노테이션은 스프링에서 설정 클래스를 나타내는 어노테이션입니다. 이 어노테이션을 사용하여 클래스를 설정 클래스로 지정하면, 해당 클래스는 스프링의 빈 구성 요소로 사용됩니다.
+
+@Configuration 어노테이션을 클래스에 적용하면 다음과 같은 효과가 있습니다:
+
+1. 스프링 컨테이너에 의해 빈으로 인식됩니다: @Configuration 어노테이션이 적용된 클래스는 스프링 컨테이너에 의해 빈으로 인식되어 관리됩니다. 다른 빈과 마찬가지로 컨테이너가 생성하고 초기화하여 애플리케이션에서 사용할 수 있습니다.
+
+2. 빈의 정의를 포함하는 메서드를 정의할 수 있습니다: @Configuration 어노테이션이 적용된 클래스는 빈의 정의를 포함하는 메서드를 정의할 수 있습니다. 이 메서드는 @Bean 어노테이션과 함께 사용되어 빈의 생성과 구성을 정의합니다.
+
+3. 다른 설정 클래스를 임포트할 수 있습니다: @Configuration 어노테이션이 적용된 클래스는 @Import 어노테이션을 사용하여 다른 설정 클래스를 임포트할 수 있습니다. 이를 통해 여러 설정 클래스를 조합하여 애플리케이션의 전체적인 구성을 정의할 수 있습니다.
+
+
+============================================================================
+
+
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'boardDAOMyBatis' defined in file [C:\DEV\eclipse-workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\0523_TransactionSynchronizationManager\WEB-INF\classes\com\min\biz\board\impl\BoardDAOMyBatis.class]: Unsatisfied dependency expressed through constructor parameter 0; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSession' defined in com.min.biz.mapper.MyBatisConfig: Unsatisfied dependency expressed through method 'sqlSession' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in com.min.biz.mapper.MyBatisConfig: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.FileNotFoundException: class path resource [classpath:sql-map-config.xml] cannot be opened because it does not exist
+
+
+
+
+[INFO] Building springproject_alpha_pre 1.0.0-BUILD-SNAPSHOT
+[INFO] --------------------------------[ war ]--------------------
+[INFO]
+[INFO] --- maven-dependency-plugin:2.8:tree (default
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/d
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/d
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/r
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/d
+Downloading from central: https://repo.maven.apache.org/maven2/org/codehaus/plex
+Downloaded from central: https://repo.maven.apache.org/maven2/org/codehaus/plexu
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/d
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/d
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/d
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/d
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/d
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/d
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/d
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/d
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/s
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/s
+Downloading from central: https://repo.maven.apache.org/maven2/commons-validator
+Downloaded from central: https://repo.maven.apache.org/maven2/commons-validator/
+Downloading from central: https://repo.maven.apache.org/maven2/xml-apis/xml-apis
+Downloaded from central: https://repo.maven.apache.org/maven2/xml-apis/xml-apis/
+Downloading from central: https://repo.maven.apache.org/maven2/org/codehaus/plex
+Downloaded from central: https://repo.maven.apache.org/maven2/org/codehaus/plexu
+Downloading from central: https://repo.maven.apache.org/maven2/org/codehaus/plex
+Downloaded from central: https://repo.maven.apache.org/maven2/org/codehaus/plexu
+Downloading from central: https://repo.maven.apache.org/maven2/org/codehaus/plex
+Downloaded from central: https://repo.maven.apache.org/maven2/org/codehaus/plexu
+Downloading from central: https://repo.maven.apache.org/maven2/org/codehaus/plex
+Downloaded from central: https://repo.maven.apache.org/maven2/org/codehaus/plexu
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/s
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/s
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/s
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/codehaus/plex
+Downloaded from central: https://repo.maven.apache.org/maven2/org/codehaus/plexu
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/w
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/w
+Downloading from central: https://repo.maven.apache.org/maven2/org/codehaus/plex
+Downloaded from central: https://repo.maven.apache.org/maven2/org/codehaus/plexu
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/s
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/s
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/s
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/m
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/s
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloading from central: https://repo.maven.apache.org/maven2/commons-logging/c
+Downloading from central: https://repo.maven.apache.org/maven2/commons-validator
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/r
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/commons-logging/co
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/d
+Downloading from central: https://repo.maven.apache.org/maven2/org/codehaus/plex
+Downloaded from central: https://repo.maven.apache.org/maven2/org/codehaus/plexu
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/d
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/s
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/d
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/d
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/d
+Downloading from central: https://repo.maven.apache.org/maven2/org/codehaus/plex
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/d
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/d
+Downloading from central: https://repo.maven.apache.org/maven2/org/codehaus/plex
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/commons-validator/
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/d
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/s
+Downloading from central: https://repo.maven.apache.org/maven2/org/codehaus/plex
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/s
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/w
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/codehaus/plexu
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/s
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/s
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/s
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/s
+Downloaded from central: https://repo.maven.apache.org/maven2/org/codehaus/plexu
+Downloaded from central: https://repo.maven.apache.org/maven2/org/codehaus/plexu
+[INFO] com.min:project:war:1.0.0-BUILD-SNAPSHOT
+[INFO] +- org.springframework:spring-context:jar:3.1.1.RELEASE:compile
+[INFO] |  +- org.springframework:spring-aop:jar:3.1.1.RELEASE:compile
+[INFO] |  +- org.springframework:spring-beans:jar:3.1.1.RELEASE:compil
+[INFO] |  +- org.springframework:spring-core:jar:3.1.1.RELEASE:compile
+[INFO] |  +- org.springframework:spring-expression:jar:3.1.1.RELEASE:c
+[INFO] |  \- org.springframework:spring-asm:jar:3.1.1.RELEASE:compile
+[INFO] +- org.springframework:spring-webmvc:jar:3.1.1.RELEASE:compile
+[INFO] |  +- org.springframework:spring-context-support:jar:3.1.1.RELE
+[INFO] |  \- org.springframework:spring-web:jar:3.1.1.RELEASE:compile
+[INFO] +- org.aspectj:aspectjweaver:jar:1.6.11:compile
+[INFO] +- org.aspectj:aspectjrt:jar:1.6.10:compile
+[INFO] +- org.slf4j:slf4j-api:jar:1.6.6:compile
+[INFO] +- org.slf4j:jcl-over-slf4j:jar:1.6.6:runtime
+[INFO] +- org.apache.logging.log4j:log4j-slf4j-impl:jar:2.12.1:compile
+[INFO] |  +- org.apache.logging.log4j:log4j-api:jar:2.12.1:compile
+[INFO] |  \- org.apache.logging.log4j:log4j-core:jar:2.12.1:runtime
+[INFO] +- log4j:log4j:jar:1.2.17:compile
+[INFO] +- hsqldb:hsqldb:jar:1.8.0.10:compile
+[INFO] +- org.easymock:easymock:jar:3.0:compile
+[INFO] |  +- cglib:cglib-nodep:jar:2.2:compile
+[INFO] |  \- org.objenesis:objenesis:jar:1.2:compile
+[INFO] +- commons-collections:commons-collections:jar:3.2:compile
+[INFO] +- commons-digester:commons-digester:jar:1.8:compile
+[INFO] +- org.antlr:antlr:jar:3.0.1:compile
+[INFO] |  +- org.antlr:stringtemplate:jar:3.1-b1:compile
+[INFO] |  \- antlr:antlr:jar:2.7.7:compile
+[INFO] +- javax.inject:javax.inject:jar:1:compile
+[INFO] +- javax.servlet:servlet-api:jar:2.5:provided
+[INFO] +- javax.servlet.jsp:jsp-api:jar:2.1:provided
+[INFO] +- javax.servlet:jstl:jar:1.2:compile
+[INFO] +- junit:junit:jar:4.12:compile
+[INFO] |  \- org.hamcrest:hamcrest-core:jar:1.3:compile
+[INFO] +- org.springframework:spring-jdbc:jar:3.1.1.RELEASE:compile
+[INFO] |  \- org.springframework:spring-tx:jar:3.1.1.RELEASE:compile
+[INFO] +- org.apache.ibatis:ibatis-sqlmap:jar:2.3.4.726:compile
+[INFO] +- org.springframework:spring-orm:jar:3.1.1.RELEASE:compile
+[INFO] +- org.mybatis:mybatis-spring:jar:1.2.4:compile
+[INFO] +- org.mybatis:mybatis:jar:3.3.1:compile
+[INFO] +- com.h2database:h2:jar:2.1.214:test
+[INFO] +- commons-dbcp:commons-dbcp:jar:1.4:compile
+[INFO] |  \- commons-pool:commons-pool:jar:1.5.4:compile
+[INFO] +- commons-fileupload:commons-fileupload:jar:1.2.2:compile
+[INFO] +- com.fasterxml.jackson.core:jackson-databind:jar:2.15.0:compi
+[INFO] |  +- com.fasterxml.jackson.core:jackson-annotations:jar:2.15.0
+[INFO] |  \- com.fasterxml.jackson.core:jackson-core:jar:2.15.0:compil
+[INFO] +- aopalliance:aopalliance:jar:1.0:compile
+[INFO] +- javax.annotation:jsr250-api:jar:1.0:compile
+[INFO] +- commons-logging:commons-logging:jar:1.1.1:compile
+[INFO] +- commons-beanutils:commons-beanutils:jar:1.8.3:compile
+[INFO] +- taglibs:standard:jar:1.1.2:compile
+[INFO] +- cglib:cglib:jar:2.2:compile
+[INFO] |  \- asm:asm:jar:3.1:compile
+[INFO] +- org.apache.commons:commons-compress:jar:1.1:compile
+[INFO] +- org.apache.commons:commons-email:jar:1.3.2:compile
+[INFO] |  +- javax.mail:mail:jar:1.4.5:compile
+[INFO] |  \- javax.activation:activation:jar:1.1.1:compile
+[INFO] +- commons-validator:commons-validator:jar:1.3.1:compile
+[INFO] +- commons-io:commons-io:jar:2.0.1:compile
+[INFO] +- org.unitils:unitils:jar:2.2:test
+[INFO] |  +- ognl:ognl:jar:2.6.9:test
+[INFO] |  \- ant:ant:jar:1.6.5:test
+[INFO] +- com.ibm.icu:icu4j:jar:4.8:compile
+[INFO] +- commons-lang:commons-lang:jar:2.6:compile
+[INFO] +- org.jdom:jdom:jar:1.1:compile
+[INFO] +- org.codehaus.jackson:jackson-mapper-asl:jar:1.9.13:compile
+[INFO] |  \- org.codehaus.jackson:jackson-core-asl:jar:1.9.13:compile
+[INFO] +- net.sf.json-lib:json-lib:jar:jdk15:2.4:compile
+[INFO] |  \- net.sf.ezmorph:ezmorph:jar:1.0.6:compile
+[INFO] +- org.json:json:jar:20080701:compile
+[INFO] +- org.scala-lang:scala-library:jar:2.10.4:compile
+[INFO] \- ch.qos.logback:logback-classic:jar:1.0.13:compile
+[INFO]    \- ch.qos.logback:logback-core:jar:1.0.13:compile
+[INFO] -----------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] -----------------------------------------------------------
+[INFO] Total time:  23.428 s
+[INFO] Finished at: 2023-05-24T13:58:59+09:00
+[INFO] -----------------------------------------------------------
+
+MSH@DESKTOP-BSKEU0A MINGW64 /c/DEV/eclipse-workspace/git/Spring_project (master)
+$ mvn package
+[INFO] Scanning for projects...
+[WARNING]
+[WARNING] Some problems were encountered while building the effective
+[WARNING] 'dependencies.dependency.(groupId:artifactId:type:classifier
+[WARNING] 'dependencies.dependency.(groupId:artifactId:type:classifier
+[WARNING] 'dependencies.dependency.(groupId:artifactId:type:classifier
+[WARNING] 'dependencies.dependency.(groupId:artifactId:type:classifier
+[WARNING] 'dependencies.dependency.(groupId:artifactId:type:classifier
+[WARNING] 'dependencies.dependency.(groupId:artifactId:type:classifier
+[WARNING] 'dependencies.dependency.(groupId:artifactId:type:classifier
+[WARNING] 'dependencies.dependency.(groupId:artifactId:type:classifier
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:
+[WARNING]
+[WARNING] It is highly recommended to fix these problems because they
+[WARNING]
+[WARNING] For this reason, future Maven versions might no longer suppo
+[WARNING]
+[INFO]
+[INFO] --------------------------< com.min:project >-
+[INFO] Building springproject_alpha_pre 1.0.0-BUILD-SNAPSHOT
+[INFO] --------------------------------[ war ]--------------------
+[INFO]
+[INFO] --- maven-resources-plugin:2.6:resources (def
+[WARNING] Using platform encoding (MS949 actually) to copy filtered re
+[INFO] Copying 8 resources
+[INFO]
+[INFO] --- maven-compiler-plugin:2.5.1:compile (defa
+[INFO] Nothing to compile - all classes are up to date
+[INFO]
+[INFO] --- maven-resources-plugin:2.6:testResources 
+[WARNING] Using platform encoding (MS949 actually) to copy filtered re
+[INFO] Copying 1 resource
+[INFO]
+[INFO] --- maven-compiler-plugin:2.5.1:testCompile (
+[INFO] Nothing to compile - all classes are up to date
+[INFO]
+[INFO] --- maven-surefire-plugin:2.12.4:test (defaul
+[INFO]
+[INFO] --- maven-war-plugin:2.2:war (default-war)
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by com.thoughtworks.xstream.core.util.Fields
+lts
+WARNING: Please consider reporting this to the maintainers of com.thoughtworks.x
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflect
+WARNING: All illegal access operations will be denied in a future release
+[INFO] Packaging webapp
+[INFO] Assembling webapp [project] in [C:\DEV\eclipse-workspace\git\Sp
+[INFO] Processing war project
+[INFO] Copying webapp resources [C:\DEV\eclipse-workspace\git\Spring_p
+[INFO] Webapp assembled in [2287 msecs]
+[INFO] Building war: C:\DEV\eclipse-workspace\git\Spring_project\targe
+[INFO] WEB-INF\web.xml already added, skipping
+[INFO] -----------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] -----------------------------------------------------------
+[INFO] Total time:  12.244 s
+[INFO] Finished at: 2023-05-24T14:20:27+09:00
+[INFO] -----------------------------------------------------------
+
+
+
+
+14:24:23.019 [main] ERROR org.springframework.web.servlet.DispatcherServlet - Context initialization failed
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'boardDAOMyBatis' defined in file [C:\DEV\eclipse-workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\0523_TransactionSynchronizationManager\WEB-INF\classes\com\min\biz\board\impl\BoardDAOMyBatis.class]: Unsatisfied dependency expressed through constructor parameter 0; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSession' defined in com.min.biz.mapper.MyBatisConfig: Unsatisfied dependency expressed through method 'sqlSession' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in com.min.biz.mapper.MyBatisConfig: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.FileNotFoundException: class path resource [classpath:sql-map-config.xml] cannot be opened because it does not exist
+	
+
+
+
+15:45:48.804 [main] ERROR org.springframework.web.context.ContextLoader - Context initialization failed
+org.springframework.beans.factory.BeanCreationException:
+ Error creating bean with name 'sqlSessionFactory' defined in class path resource [business-layer.xml]: 
+ Initialization of bean failed; 
+ nested exception is java.lang.reflect.MalformedParameterizedTypeException
+
+
+
+Caused by: java.lang.reflect.MalformedParameterizedTypeException
+	at sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl.validateConstructorArguments(ParameterizedTypeImpl.java:59) ~[?:?]
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==============================================================================================
+
+
+
+
+
+
+
+
+
+
+
 
 
 

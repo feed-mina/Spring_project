@@ -21,7 +21,7 @@
 			<artifactId>spring-context</artifactId>
 			<version>5.3.9</version>
 			<exclusions>
-				<!-- Exclude Commons Logging in favor of SLF4j -->
+				<!-- SLF4j를 위해 Commons Logging 제외 -->
 				<exclusion>
 					<groupId>commons-logging</groupId>
 					<artifactId>commons-logging</artifactId>
@@ -206,25 +206,25 @@
 			<artifactId>jackson-core</artifactId>
 			<version>2.9.2</version>
 		</dependency>
-
-		<!-- Mybatis -->
+		<!-- MyBatis 라이브러리 의존성 -->
 		<dependency>
 			<groupId>org.mybatis</groupId>
 			<artifactId>mybatis</artifactId>
-			<version>3.3.1</version>
+			<version>3.5.7</version>
 		</dependency>
 
-		<!-- Mybatis Spring -->
+		<!-- MyBatis 스프링 연동 라이브러리 의존성 -->
 		<dependency>
 			<groupId>org.mybatis</groupId>
 			<artifactId>mybatis-spring</artifactId>
-			<version>1.2.4</version>
+			<version>2.0.7</version>
 		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-ibatis -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-ibatis</artifactId>
-			<version>2.0.8</version>
+			<version>2.0.7</version>
 		</dependency>
 		<!-- ibatis -->
 		<dependency>
@@ -306,6 +306,8 @@
 		</dependency>
 
 	</dependencies>
+
+
 	<build>
 		<plugins>
 			<plugin>
@@ -343,5 +345,15 @@
 				</configuration>
 			</plugin>
 		</plugins>
+
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
+			</resource>
+		</resources>
+
 	</build>
 </project>
