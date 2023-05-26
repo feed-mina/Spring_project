@@ -2,23 +2,19 @@ package com.min.biz.board;
 
 import java.util.List;
 
-// Service �������̽�
+import org.springframework.stereotype.Service;
+@Service
 public interface BoardService {
 
-	// CRUD ����� �޼ҵ� ����
-	// �� ���
-	void insertBoard(BoardVO vo);
+ 	void insertBoard(BoardVO vo);
 
-	// �� ����
-	void updateBoard(BoardVO vo);
+ 	void updateBoard(BoardVO vo);
 
-	// �� ����
-	void deleteBoard(BoardVO vo);
+ 	void deleteBoard(BoardVO vo);
 
-	// �� �� ��ȸ
-	BoardVO getBoard(BoardVO vo);
+ 	BoardVO getBoard(BoardVO vo);
 
-	// �� ��� ��ȸ
+	 
 	List<BoardVO> getBoardList(BoardVO vo);
 
 }

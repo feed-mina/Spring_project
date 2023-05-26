@@ -38,13 +38,11 @@ public class BoardController {
 
 	@RequestMapping(value = "/insertBoard.do", method = RequestMethod.POST)
 	public String insertBoard(BoardVO vo) throws Exception {
-		// 1. ���� ���ε� ó��
 		MultipartFile uploadFile = vo.getUploadFile();
 		if(!uploadFile.isEmpty()) {
 			uploadFile.transferTo(new File("C:/DEV/" + uploadFile.getOriginalFilename()));
 		}
-		
-		// 2. �� ��� ó��
+		 
 		boardService.insertBoard(vo);
 		return "forward:getBoardList.do";
 	}

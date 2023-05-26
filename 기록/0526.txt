@@ -1,0 +1,147 @@
+5월 26일
+심각: Context initialized 이벤트를 [org.springframework.web.context.ContextLoaderListener] 클래스의 인스턴스인 리스너에 전송하는 동안 예외 발생
+org.springframework.beans.factory.BeanCreationException: 
+Error creating bean with name 'sqlSessionFactory' defined in class path resource [business-layer.xml]:
+ Initialization of bean failed; nested exception is java.lang.reflect.MalformedParameterizedTypeException
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean
+	(AbstractAutowireCapableBeanFactory.java:610)
+Caused by: java.lang.reflect.MalformedParameterizedTypeException
+	at java.base/sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl.validateConstructorArguments
+	(ParameterizedTypeImpl.java:59)
+ 
+
+5월 26, 2023 5:30:18 오후 org.apache.catalina.core.StandardContext listenerStart
+심각: Context initialized 이벤트를 [org.springframework.web.context.ContextLoaderListener] 클래스의 인스턴스인 리스너에 전송하는 동안 예외 발생
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'boardDAO' defined in class path resource [business-layer.xml]: Cannot resolve reference to bean 'SqlSessionTemplate' while setting constructor argument; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'SqlSessionTemplate' available
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:342)
+
+Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'SqlSessionTemplate' available
+
+=============================================================================================================
+
+
+
+
+
+17:33:40.791 [main] ERROR org.springframework.web.context.ContextLoader 
+- Context initialization failed
+org.springframework.beans.factory.UnsatisfiedDependencyException: 
+Error creating bean with name 'boardDAOMyBatis' defined in file [C:\DEV\eclipse-workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\0523_TransactionSynchronizationManager\WEB-INF\classes\com\min\biz\board\impl\BoardDAOMyBatis.class]: 
+Unsatisfied dependency expressed through constructor parameter 0; 
+
+nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: 
+Error creating bean with name 'sqlSession' defined in com.min.biz.mapper.MyBatisConfig: 
+Unsatisfied dependency expressed through method 'sqlSession' parameter 0; 
+
+nested exception is org.springframework.beans.factory.BeanCreationException: 
+Error creating bean with name 'sqlSessionFactory' defined in com.min.biz.mapper.MyBatisConfig: 
+Bean instantiation via factory method failed; 
+
+nested exception is org.springframework.beans.BeanInstantiationException: 
+Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: 
+Factory method 'sqlSessionFactory' threw exception; 
+nested exception is java.lang.NoSuchMethodError: 'void org.apache.ibatis.session.Configuration.setVfsImpl(java.lang.Class)'
+
+
+
+
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSession' defined in com.min.biz.mapper.MyBatisConfig: Unsatisfied dependency expressed through method 'sqlSession' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in com.min.biz.mapper.MyBatisConfig: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.lang.NoSuchMethodError: 'void org.apache.ibatis.session.Configuration.setVfsImpl(java.lang.Class)'
+
+
+
+Caused by: org.springframework.beans.factory.BeanCreationException: 
+Error creating bean with name 'sqlSessionFactory' defined in com.min.biz.mapper.MyBatisConfig: 
+Bean instantiation via factory method failed; 
+nested exception is org.springframework.beans.BeanInstantiationException: 
+Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]:
+Factory method 'sqlSessionFactory' threw exception; 
+nested exception is java.lang.NoSuchMethodError: 
+'void org.apache.ibatis.session.Configuration.setVfsImpl(java.lang.Class)'
+
+Caused by: java.lang.NoSuchMethodError: 
+'void org.apache.ibatis.session.Configuration.setVfsImpl(java.lang.Class)'
+
+
+
+
+
+
+
+===========================================================================================
+
+
+ 
+
+정보: Initializing Spring DispatcherServlet 'action'
+18:00:30.621 [http-nio-8080-exec-7] ERROR org.springframework.web.servlet.DispatcherServlet - Context initialization failed
+org.springframework.beans.factory.BeanDefinitionStoreException: Unexpected exception parsing XML document from ServletContext resource [/WEB-INF/config/presentation-layer.xml]; nested exception is org.springframework.context.annotation.ConflictingBeanDefinitionException: Annotation-specified bean name 'loginController' for bean class [com.min.controller.user.LoginController] conflicts with existing, non-compatible bean definition of same name and class [com.min.controller.login.LoginController]
+
+
+5월 26, 2023 6:00:30 오후 org.apache.catalina.core.ApplicationContext log
+심각: 서블릿 [action]을(를) 위한 Servlet.init() 호출이 예외를 발생시켰습니다.
+org.springframework.beans.factory.BeanDefinitionStoreException: Unexpected exception parsing XML document from ServletContext resource [/WEB-INF/config/presentation-layer.xml]; nested exception is org.springframework.context.annotation.ConflictingBeanDefinitionException: Annotation-specified bean name 'loginController' for bean class [com.min.controller.user.LoginController] conflicts with existing, non-compatible bean definition of same name and class [com.min.controller.login.LoginController]
+
+
+Caused by: org.springframework.context.annotation.ConflictingBeanDefinitionException: Annotation-specified bean name 'loginController' for bean class [com.min.controller.user.LoginController] conflicts with existing, non-compatible bean definition of same name and class [com.min.controller.login.LoginController]
+
+
+org.springframework.context.annotation.ConflictingBeanDefinitionException: Annotation-specified bean name 'loginController' for bean class [com.min.controller.user.LoginController] conflicts with existing, non-compatible bean definition of same name and class [com.min.controller.login.LoginController]
+
+
+
+ loginController라는 이름의 빈 클래스가 충돌하고 있는 것으로 보입니다. com.min.controller.user.LoginController 클래스와 com.min.controller.login.LoginController 클래스가 동일한 이름을 가지는 빈으로 등록되어 충돌이 발생하고 있습니다.
+ 
+ 
+
+
+===========================================================================================
+
+
+
+ 18:11:39.565 [http-nio-8080-exec-4] ERROR org.springframework.web.servlet.DispatcherServlet - Context initialization failed
+
+ 
+ org.springframework.beans.factory.UnsatisfiedDependencyException: 
+ Error creating bean with name 'boardController': 
+ Unsatisfied dependency expressed through field 'boardService'; 
+ nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: 
+ No qualifying bean of type 'com.min.biz.board.BoardService' available: 
+ expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+ 
+ 	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor
+	$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:660) ~[spring-beans-5.3.9.jar:5.3.9]
+
+ 
+ org.springframework.beans.factory.UnsatisfiedDependencyException: 
+ Error creating bean with name 'boardController': 
+ Unsatisfied dependency expressed through field 'boardService'; 
+ nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: 
+ No qualifying bean of type 'com.min.biz.board.BoardService' available: 
+ expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+
+ 
+ 
+
+
+
+
+===========================================================================================
+
+
+
+19:25:08.380 [http-nio-8080-exec-4] ERROR org.springframework.web.servlet.DispatcherServlet - Context initialization failed
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'boardController': Unsatisfied dependency expressed through field 'boardService'; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'com.min.biz.board.BoardService' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+
+
+
+Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'com.min.biz.board.BoardService' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+
+
+
+
+
+
+
+
+
+

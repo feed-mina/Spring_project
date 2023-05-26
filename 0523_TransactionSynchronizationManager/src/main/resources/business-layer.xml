@@ -14,6 +14,11 @@
  
 	<!-- Annotation 기반의 AOP 설정 -->
 	<aop:aspectj-autoproxy />
+ 
+	<!-- Annotation 기반의 IoC 설정  -->
+	<context:component-scan
+		base-package="com.min.biz"/>
+
 
 	<!-- Spring과 JPA 연동 설정 <bean id="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"></bean> 
 		<bean id="entityManagerFactoryBean" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"> 
@@ -39,38 +44,18 @@
 	
 	<!-- MyBatis에서 가장 핵심적인 객체는 SqlSession이라는 존재와 SqlSessionFactoryBean이다. -->
 
-	<!-- Spring과 MyBatis 연동 설정 -->
-	<bean id="sqlSessionFactory"
-		class="org.mybatis.spring.SqlSessionFactoryBean">
+	<!-- Spring과 MyBatis sqlSessionFactory 연동 설정 -->
+ 
 
-		<property name="configLocation"
-			value="classpath:/META-INF/MyBatisConfig.xml" />
-		<property name="mapperLocations"
-			value="classpath*:/mappings/*mapping.xml" />
-		<property name="dataSource" ref="dataSource" />
-		<property name="typeAliasesPackage" value="com.min.biz" />
-	</bean>
-
-
-<!-- sqlSessionTemplate -->
-	<bean id="SqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate" >
-		<qualifier value="SqlSessionTemplate"/>
-		<constructor-arg  ref="sqlSessionFactory" />
-	</bean>
-
-<bean id="boardDAO" class="com.min.biz.board.impl.BoardDAOMyBatis">
-	<constructor-arg ref="SqlSessionTemplate"/>
-</bean>
-	<!-- Annotation 기반의 IoC 설정 -->
-	<context:component-scan
-		base-package="com.min.biz"/>
+	<!-- sqlSessionTemplate -->
+ 
 	 
-<!-- mybatis-spring 설정 -->
+<!-- mybatis-spring 설정 
 
 	<mybatis-spring:scan
 		base-package="com.min.biz.mapper" annotation="org.apache.ibatis.annotations.Mapper" />
 
- 
+--> 
 
 	<!-- Transaction 설정 -->
 	<bean id="txManager"

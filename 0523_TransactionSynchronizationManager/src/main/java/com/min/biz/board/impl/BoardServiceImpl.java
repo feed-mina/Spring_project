@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.min.biz.board.BoardService;
 import com.min.biz.board.BoardVO;
 
-// Service ���� Ŭ����
 @Service("boardService")
 public class BoardServiceImpl implements BoardService {
 	
